@@ -93,24 +93,25 @@ class ProductCest
         ]);
         $I->seeResponseCodeIs(401);
     }
-/*
+
     public function create(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
         $I->sendPOST('/products', [
-            'title' => 'New Product',
+            'code' => '00000004',
+            'description' => 'New Product',
         ]);
         $I->seeResponseCodeIs(201);
         $I->seeResponseContainsJson([
-            'user_id' => 1,
-            'title' => 'New Product',
+            'author_id' => 1,
+            'description' => 'New Product',
         ]);
     }
 
     public function updateUnauthorized(ApiTester $I)
     {
         $I->sendPATCH('/products/1', [
-            'title' => 'New Title',
+            'description' => 'New product description',
         ]);
         $I->seeResponseCodeIs(401);
     }
@@ -119,15 +120,15 @@ class ProductCest
     {
         $I->amBearerAuthenticated('token-correct');
         $I->sendPATCH('/products/1', [
-            'title' => 'New Title',
+            'description' => 'New product description',
         ]);
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             'id' => 1,
-            'title' => 'New Title',
+            'description' => 'New product description',
         ]);
     }
-
+/*
     public function updateForbidden(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');

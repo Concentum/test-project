@@ -9,7 +9,7 @@ use yii\rest\ActiveController;
 class ProductController extends base\HierarchicalReferenceController
 {
     public $modelClass = '\api\models\Product';
-/*
+
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
@@ -21,5 +21,5 @@ class ProductController extends base\HierarchicalReferenceController
        return array_merge(parent::actions(), [
        ]);
     }
-    */
+    
 }

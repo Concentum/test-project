@@ -1,6 +1,8 @@
 <?php
 namespace api\models;
 
+use yii\behaviors\TimestampBehavior;
+use yii\behaviors\BlameableBehavior;
 /**
  * This is the model class for table "counterparty".
  *
@@ -23,6 +25,11 @@ class Counterparty extends base\HierarchicalReference
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'author_id',
+                'updatedByAttribute' => false,
+            ],
         ]);
     }
     

@@ -16,8 +16,6 @@ use api\models\User;
  */
 class SimpleReference extends Proto
 {
-   
-
     public function fields()
     {
         return array_merge(parent::fields(), [
