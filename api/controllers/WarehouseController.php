@@ -10,6 +10,12 @@ class WarehouseController extends base\SimpleReferenceController
 {
     public $modelClass = 'api\models\Warehouse';
     
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+        ]);
+    }
+    
     public function actions()
     {
        return array_merge(parent::actions(), [

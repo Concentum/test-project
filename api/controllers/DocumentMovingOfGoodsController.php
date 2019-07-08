@@ -10,6 +10,12 @@ class DocumentMovingOfGoodsController extends base\DocumentController
 {
     public $modelClass = 'api\models\DocumentMovingOfGoods';
 
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+        ]);
+    }
+    
     public function actions()
     {
         return array_merge(parent::actions(), [

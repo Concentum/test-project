@@ -3,7 +3,6 @@ use yii\db\Expression;
 
 return [
     [
-        'id' => 1,
         'code' => '00000001',
         'description' => 'Ноутбуки',
         'is_deleted' => false,
@@ -14,7 +13,6 @@ return [
     ],
 
     [
-        'id' => 2,
         'code' => '00000002',
         'description' => 'Ноутбук ASUS VivoBook S15',
         'is_deleted' => false,
@@ -25,7 +23,6 @@ return [
     ],
 
     [
-        'id' => 3,
         'code' => '00000003',
         'description' => 'Ноутбук Apple MacBook Air',
         'is_deleted' => false,

@@ -9,6 +9,12 @@ use api\models\DocumentComingOfGoods;
 class DocumentComingOfGoodsController extends base\DocumentController
 {
     public $modelClass = 'api\models\DocumentComingOfGoods';
+    
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+        ]);
+    }
 
     public function actions()
     {

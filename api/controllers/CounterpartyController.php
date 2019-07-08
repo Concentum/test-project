@@ -10,6 +10,12 @@ class CounterpartyController extends base\HierarchicalReferenceController
 {
     public $modelClass = 'api\models\Counterparty';
 
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+        ]);
+    }
+    
     public function actions()
     {
        return array_merge(parent::actions(), [

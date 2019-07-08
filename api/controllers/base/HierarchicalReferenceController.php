@@ -10,20 +10,9 @@ class HierarchicalReferenceController extends SimpleReferenceController
      */
     public function behaviors()
     {
-        $behaviors = parent::behaviors();
-
-        // add CORS filter
-        $behaviors['corsFilter'] = [
-          'class' => \yii\filters\Cors::className(),
-        ];
-/*
-        $behaviors['authenticator'] = [
-          'class' => \yii\filters\auth\HttpBearerAuth::className(),
-        ];
-*/
-        return $behaviors;
+        return array_merge(parent::behaviors(), [
+        ]);
     }
-
     
     public function actions()
     {

@@ -26,7 +26,8 @@ class ProductCest
     }
 
     public function index(ApiTester $I)
-    {
+    {   
+        $I->amBearerAuthenticated('token-correct');
         $I->sendGET('/products');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
@@ -38,7 +39,8 @@ class ProductCest
     }
 
     public function indexWithAuthor(ApiTester $I)
-    {
+    {   
+        $I->amBearerAuthenticated('token-correct');
         $I->sendGET('/products?expand=author');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
@@ -52,7 +54,8 @@ class ProductCest
     }
 
     public function search(ApiTester $I)
-    {
+    {   
+        $I->amBearerAuthenticated('token-correct');
         $I->sendGET('/products?filter[description][like]=MacBook');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
@@ -65,7 +68,8 @@ class ProductCest
     }
 
     public function view(ApiTester $I)
-    {
+    {   
+        $I->amBearerAuthenticated('token-correct');
         $I->sendGET('/products/1');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
@@ -74,19 +78,22 @@ class ProductCest
     }
 
     public function viewNotFound(ApiTester $I)
-    {
+    {   
+        $I->amBearerAuthenticated('token-correct');
         $I->sendGET('/products/15');
         $I->seeResponseCodeIs(404);
     }
-/*
+
     public function createUnauthorized(ApiTester $I)
     {
         $I->sendPOST('/products', [
-            'title' => 'New Product',
+            'code' => '00000004',
+            'description' => 'New Product',
+            'author_id' => '1',
         ]);
         $I->seeResponseCodeIs(401);
     }
-
+/*
     public function create(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');

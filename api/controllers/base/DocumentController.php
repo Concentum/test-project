@@ -17,20 +17,15 @@ class DocumentController extends ActiveController
      */
     public function behaviors()
     {
-        $behaviors = parent::behaviors();
-
-        // add CORS filter
-        $behaviors['corsFilter'] = [
-          'class' => \yii\filters\Cors::className(),
-        ];
-/*
-        $behaviors['authenticator'] = [
-          'class' => \yii\filters\auth\HttpBearerAuth::className(),
-        ];
-*/
-        return $behaviors;
+        return array_merge(parent::behaviors(), [
+            $behaviors['corsFilter'] = [
+              'class' => \yii\filters\Cors::className(),
+            ],
+            $behaviors['authenticator'] = [
+              'class' => \yii\filters\auth\HttpBearerAuth::className(),
+            ],
+        ]);
     }
-
 
     public function actions()
     {
