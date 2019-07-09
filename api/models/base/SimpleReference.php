@@ -58,7 +58,6 @@ class SimpleReference extends Proto
         return array_merge([
             'id' => 'ID',
             'is_deleted' => 'Is Deleted',
-            'version' => 'Version',
             'code' => 'Code',
             'description' => 'Description',
             'author_id' => 'Author',

@@ -46,7 +46,6 @@ class Document extends \yii\db\ActiveRecord
             'id' => 'ID',
             'is_deleted' => 'Is Deleted',
             'is_posted' => 'Is Posted',
-            'version' => 'Version',
             'date_time' => 'Date Time',
             'number' => 'Number',
         ];

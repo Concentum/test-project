@@ -14,6 +14,7 @@ class MetadataController extends Controller
         'references' => ['Product', 'Counterparty', 'Warehouse'],
         'documents' => ['DocumentComingOfGoods', 'DocumentExpendOfGoods', 'DocumentMovingOfGoods']
     ];
+   
 
     /**
     * {@inheritdoc}
@@ -32,6 +33,7 @@ class MetadataController extends Controller
     
     public function actionIndex()
     {   
+        $excludeValidators = ['enableClientValidation', 'forceMasterDb', 'targetAttributeJunction'];
         foreach($this->entitys as $key => $value) {
             foreach($value as $entity) {
                 $modelClass = $this->nspace.'\\'.$entity;
@@ -43,7 +45,7 @@ class MetadataController extends Controller
                     $tmp = $valueValidator->attributes;
                     unset($valueValidator->attributes);
                     foreach($valueValidator as $propKey => $propValue) {
-                        if (is_null($propValue) || $propValue === []) {
+                        if (is_null($propValue) || $propValue === [] || in_array($propKey, $excludeValidators)) {
                             unset($valueValidator->$propKey);
                         }
                     }
@@ -62,7 +64,7 @@ class MetadataController extends Controller
                             $tmp = $valueValidator->attributes;
                             unset($valueValidator->attributes);
                             foreach($valueValidator as $propKey => $propValue) {
-                                if (is_null($propValue) || $propValue === []) {
+                                if (is_null($propValue) || $propValue === [] || in_array($propKey, $excludeValidators)) {
                                     unset($valueValidator->$propKey);
                                 }
                             }

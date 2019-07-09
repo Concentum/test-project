@@ -10,8 +10,8 @@ class DocumentDetail extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['line_number'], 'default', 'value' => null],
-            [['line_number'], 'integer'],
+    //        [['line_number'], 'default', 'value' => null],
+    //        [['line_number'], 'integer'],
         ];
     }
 
