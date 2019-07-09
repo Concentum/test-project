@@ -32,7 +32,7 @@ class m190708_165617_insert_rbac_data extends Migration
             foreach($actions as $a) {
                 //Для каждой сущности создаём разрешение
                 $permission = $auth->createPermission($a.$e);
-                $permission->description = $a.' a '.$m;
+                $permission->description = $a.' a '.$e;
                 $auth->add($permission);
                 //Добавляем роли admin это разрешение
                 $auth->addChild($admin, $permission);

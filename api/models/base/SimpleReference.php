@@ -24,6 +24,7 @@ class SimpleReference extends Proto
             'code',
             'description',
             'version',
+            'author'
         ]);
     }
 
@@ -60,6 +61,7 @@ class SimpleReference extends Proto
             'version' => 'Version',
             'code' => 'Code',
             'description' => 'Description',
+            'author_id' => 'Author',
         ], parent::attributeLabels());
     }
 

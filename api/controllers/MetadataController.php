@@ -39,14 +39,40 @@ class MetadataController extends Controller
                 foreach($model->attributeLabels() as $keyAttr => $valueAttr) {
                     $md[$key][$entity]['attributes'][$keyAttr]['label'] = $valueAttr;
                 }
-
                 foreach($model->getValidators() as $keyValidator => $valueValidator) {
-                    if (get_class($valueValidator) === 'yii\validators\ExistValidator') {
-                        $md[$key][$entity]['validators'][$keyValidator] = basename($valueValidator->targetClass);
+                    $tmp = $valueValidator->attributes;
+                    unset($valueValidator->attributes);
+                    foreach($valueValidator as $propKey => $propValue) {
+                        if (is_null($propValue) || $propValue === []) {
+                            unset($valueValidator->$propKey);
+                        }
+                    }
+                    foreach($tmp as $i => $attr) {
+                        $md[$key][$entity]['attributes'][$attr]['validators'] = $valueValidator; //basename($valueValidator->targetClass);
                     }
                 }
-
-            }    
+                if (method_exists($model, 'details')) {
+                    foreach($model->details() as $detailKey => $detail) {
+                        $modelClass = $detail;
+                        $model = new $modelClass();
+                        foreach($model->attributeLabels() as $keyAttr => $valueAttr) {
+                            $md[$key][$entity]['details'][$detailKey]['attributes'][$keyAttr]['label'] = $valueAttr;
+                        }
+                        foreach($model->getValidators() as $keyValidator => $valueValidator) {
+                            $tmp = $valueValidator->attributes;
+                            unset($valueValidator->attributes);
+                            foreach($valueValidator as $propKey => $propValue) {
+                                if (is_null($propValue) || $propValue === []) {
+                                    unset($valueValidator->$propKey);
+                                }
+                            }
+                            foreach($tmp as $i => $attr) {
+                                $md[$key][$entity]['details'][$detailKey]['attributes'][$attr]['validators'] = $valueValidator; //basename($valueValidator->targetClass);
+                            }
+                        }
+                    }   
+                }   
+            }
         }
         return $md;  
     }

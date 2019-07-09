@@ -52,8 +52,8 @@ class DocumentMovingOfGoods extends base\Document
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
-            'source' => 'Source',
-            'destination' => 'Destination',
+            'source_id' => 'Source',
+            'destination_id' => 'Destination',
         ]);
     }
 

@@ -39,7 +39,7 @@ class HierarchicalReference extends SimpleReference
     {
         return array_merge([
             'is_folder' => 'Is Folder',
-            'parent_id' => 'Parent ID',
+            'parent_id' => 'Parent',
         ], parent::attributeLabels());
     }
 

@@ -47,7 +47,7 @@ class DocumentExpendOfGoodsProduct extends base\DocumentDetail
     public function attributeLabels()
     {
         return [
-            'product' => 'Product',
+            'product_id' => 'Product',
             'quantity' => 'Quantity',
             'price' => 'Price',
             'amount' => 'Amount',

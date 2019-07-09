@@ -10,8 +10,8 @@ class DocumentDetail extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['document_id', 'line_number'], 'default', 'value' => null],
-            [['document_id', 'line_number'], 'integer'],
+            [['line_number'], 'default', 'value' => null],
+            [['line_number'], 'integer'],
         ];
     }
 
@@ -21,8 +21,7 @@ class DocumentDetail extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'document_id' => 'Document ID',
-            'line_number' => 'Line Number',
+           'line_number' => 'Line Number',
         ];
     }
 

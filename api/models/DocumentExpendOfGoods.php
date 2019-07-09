@@ -52,8 +52,8 @@ class DocumentExpendOfGoods extends base\Document
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
-            'warehouse' => 'Warehouse',
-            'counterparty' => 'Counterparty',
+            'warehouse_id' => 'Warehouse',
+            'counterparty_id' => 'Counterparty',
         ]);
     }
 
