@@ -47,6 +47,17 @@ class DocumentExpendOfGoods extends base\Document
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'warehouse' => 'Warehouse',
+            'counterparty' => 'Counterparty',
+        ]);
+    }
+
+    /**
      * @inheritdoc
      */
     public function fields()
@@ -88,8 +99,15 @@ class DocumentExpendOfGoods extends base\Document
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocumentComingOfGoodsProduct()
+    public function getDocumentExpendOfGoodsProduct()
     {
         return $this->hasMany(DocumentExpendOfGoodsProduct::className(), ['document_id' => 'id']);
+    }
+
+    public static function details()
+    {
+        return [
+            'products' => DocumentExpendOfGoodsProduct::className() 
+        ];
     }
 }

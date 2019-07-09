@@ -50,6 +50,20 @@ class SimpleReference extends Proto
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return array_merge([
+            'id' => 'ID',
+            'is_deleted' => 'Is Deleted',
+            'version' => 'Version',
+            'code' => 'Code',
+            'description' => 'Description',
+        ], parent::attributeLabels());
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getReference($className)

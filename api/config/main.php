@@ -50,6 +50,7 @@ return [
             'showScriptName' => false,
             'enableStrictParsing' => true,
             'rules' => [
+                'metadata' => 'metadata/index',
                 'auth' => 'auth/auth',
                 'signup' => 'auth/signup',
                 'profile' => 'auth/profile',

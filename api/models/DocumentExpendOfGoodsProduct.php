@@ -42,6 +42,19 @@ class DocumentExpendOfGoodsProduct extends base\DocumentDetail
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'product' => 'Product',
+            'quantity' => 'Quantity',
+            'price' => 'Price',
+            'amount' => 'Amount',
+        ];
+    }
+
+    /**
      * @inheritdoc
      */
     public function fields()

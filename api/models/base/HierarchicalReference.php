@@ -32,6 +32,17 @@ class HierarchicalReference extends SimpleReference
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return array_merge([
+            'is_folder' => 'Is Folder',
+            'parent_id' => 'Parent ID',
+        ], parent::attributeLabels());
+    }
+
     public function getParent()
     {
         return $this->hasOne($this->class, ['id' => 'parent_id']);

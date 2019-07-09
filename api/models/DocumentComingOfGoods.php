@@ -47,6 +47,17 @@ class DocumentComingOfGoods extends base\Document
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'warehouse' => 'Warehouse',
+            'counterparty' => 'Counterparty',
+        ]);
+    }
+
+    /**
      * @inheritdoc
      */
     public function fields()
@@ -91,5 +102,12 @@ class DocumentComingOfGoods extends base\Document
     public function getDocumentComingOfGoodsProduct()
     {
         return $this->hasMany(DocumentComingOfGoodsProduct::className(), ['document_id' => 'id']);
+    }
+
+    public static function details()
+    {
+        return [
+            'products' => DocumentComingOfGoodsProduct::className() 
+        ];
     }
 }

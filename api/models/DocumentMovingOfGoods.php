@@ -43,11 +43,53 @@ class DocumentMovingOfGoods extends base\Document
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'source' => 'Source',
+            'destination' => 'Destination',
+        ]);
+    }
+
+    /**
      * @inheritdoc
      */
     public function fields()
     {
         return array_merge(parent::fields(), [
         ]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSource()
+    {
+        return $this->hasOne(Warehouse::className(), ['id' => 'source_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDestination()
+    {
+        return $this->hasOne(Warehouse::className(), ['id' => 'destination_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDocumentMovingOfGoodsProduct()
+    {
+        return $this->hasMany(DocumentMovingOfGoodsProduct::className(), ['document_id' => 'id']);
+    }
+
+    public static function details()
+    {
+        return [
+            'products' => DocumentMovingOfGoodsProduct::className() 
+        ];
     }
 }

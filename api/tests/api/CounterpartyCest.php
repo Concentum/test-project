@@ -1,11 +1,11 @@
 <?php
 namespace api\tests\api;
 use \api\tests\ApiTester;
-use common\fixtures\ProductFixture;
+use common\fixtures\CounterpartyFixture;
 use common\fixtures\TokenFixture;
 use common\fixtures\UserFixture;
 
-class ProductCest
+class CounterpartyCest
 {
     public function _before(ApiTester $I)
     {
@@ -18,9 +18,9 @@ class ProductCest
                 'class' => TokenFixture::className(),
                 'dataFile' => codecept_data_dir() . 'token.php'
             ],
-            'product' => [
-                'class' => ProductFixture::className(),
-                'dataFile' => codecept_data_dir() . 'product.php'
+            'counterparty' => [
+                'class' => CounterpartyFixture::className(),
+                'dataFile' => codecept_data_dir() . 'counterparty.php'
             ],
         ]);
     }
@@ -28,12 +28,12 @@ class ProductCest
     public function index(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/products');
+        $I->sendGET('/counterparties');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
-            ['description' => 'Ноутбуки'],
-            ['description' => 'Ноутбук ASUS VivoBook S15'],
-            ['description' => 'Ноутбук Apple MacBook Air'],
+            ['description' => 'Юридические лица'],
+            ['description' => 'ООО Фабула'],
+            ['description' => 'ЗАО Одуванчик'],
         ]);
         $I->seeHttpHeader('X-Pagination-Total-Count', 3);
     }
@@ -41,11 +41,11 @@ class ProductCest
     public function indexWithAuthor(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/products?expand=author');
+        $I->sendGET('/counterparties?expand=author');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             [
-                'description' => 'Ноутбук ASUS VivoBook S15',
+                'description' => 'ООО Фабула',
                 'author' => [
                     'username' => 'erau',
                 ],
@@ -56,13 +56,13 @@ class ProductCest
     public function search(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/products?filter[description][like]=MacBook');
+        $I->sendGET('/counterparties?filter[description][like]=Одуванчик');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
-            ['description' => 'Ноутбук Apple MacBook Air'],
+            ['description' => 'ЗАО Одуванчик'],
         ]);
         $I->dontSeeResponseContainsJson([
-            ['description' => 'Ноутбук ASUS VivoBook S15'],
+            ['description' => 'ООО Фабула'],
         ]);
         $I->seeHttpHeader('X-Pagination-Total-Count', 1);
     }
@@ -70,25 +70,25 @@ class ProductCest
     public function view(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/products/1');
+        $I->sendGET('/counterparties/1');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
-            'description' => 'Ноутбуки',
+            'description' => 'Юридические лица',
         ]);
     }
 
     public function viewNotFound(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/products/15');
+        $I->sendGET('/counterparties/15');
         $I->seeResponseCodeIs(404);
     }
 
     public function createUnauthorized(ApiTester $I)
     {
-        $I->sendPOST('/products', [
+        $I->sendPOST('/counterparties', [
             'code' => '00000004',
-            'description' => 'New Product',
+            'description' => 'New Counterparty',
             'author_id' => '1',
         ]);
         $I->seeResponseCodeIs(401);
@@ -97,21 +97,21 @@ class ProductCest
     public function create(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
-        $I->sendPOST('/products', [
+        $I->sendPOST('/counterparties', [
             'code' => '00000004',
-            'description' => 'New Product',
+            'description' => 'New Counterparty',
         ]);
         $I->seeResponseCodeIs(201);
         $I->seeResponseContainsJson([
             'author_id' => 1,
-            'description' => 'New Product',
+            'description' => 'New Counterparty',
         ]);
     }
 
     public function updateUnauthorized(ApiTester $I)
     {
-        $I->sendPATCH('/products/1', [
-            'description' => 'New product description',
+        $I->sendPATCH('/counterparties/1', [
+            'description' => 'New counterparty description',
         ]);
         $I->seeResponseCodeIs(401);
     }
@@ -119,42 +119,42 @@ class ProductCest
     public function update(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
-        $I->sendPATCH('/products/1', [
-            'description' => 'New product description',
+        $I->sendPATCH('/counterparties/1', [
+            'description' => 'New counterparty description',
         ]);
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             'id' => 1,
-            'description' => 'New product description',
+            'description' => 'New counterparty description',
         ]);
     }
 
     public function updateForbidden(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-of-user-without-permission');
-        $I->sendPATCH('/products/2', [
-            'description' => 'New product description',
+        $I->sendPATCH('/counterparties/2', [
+            'description' => 'New counterparty description',
         ]);
         $I->seeResponseCodeIs(403);
     }
 
     public function deleteUnauthorized(ApiTester $I)
     {
-        $I->sendDELETE('/products/1');
+        $I->sendDELETE('/counterparties/1');
         $I->seeResponseCodeIs(401);
     }
 
     public function delete(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
-        $I->sendDELETE('/products/1');
+        $I->sendDELETE('/counterparties/1');
         $I->seeResponseCodeIs(204);
     }
 
     public function deleteForbidden(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-of-user-without-permission');
-        $I->sendDELETE('/products/2');
+        $I->sendDELETE('/counterparties/2');
         $I->seeResponseCodeIs(403);
     }
     

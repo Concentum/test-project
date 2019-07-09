@@ -41,6 +41,18 @@ class DocumentComingOfGoodsProduct extends base\DocumentDetail
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'product' => 'Product',
+            'quantity' => 'Quantity',
+            'price' => 'Price',
+            'amount' => 'Amount',
+        ];
+    }
 
     /**
      * @inheritdoc
@@ -51,6 +63,7 @@ class DocumentComingOfGoodsProduct extends base\DocumentDetail
           'product',
           'quantity',
           'price',
+          'amount'
         ]);
     }
 

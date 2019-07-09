@@ -53,4 +53,9 @@ class DocumentController extends ActiveController
         return $actions;
     }
 
+    public function checkAccess($action, $model = null, $params = [])
+    {   
+        if (!\Yii::$app->user->can($action.basename($this->modelClass)))
+        throw new \yii\web\ForbiddenHttpException();
+    }   
 }

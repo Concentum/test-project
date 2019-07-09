@@ -46,9 +46,14 @@ class SimpleReferenceController extends ActiveController
                         ->addRule('description', 'string')
                         ->addRule('is_deleted', 'integer');
                     }
-                ]
-            ]    
+                ],
+            ]
         ]);
     }
 
+    public function checkAccess($action, $model = null, $params = [])
+    {   \Yii::info(\Yii::$app->user->can($action.basename($this->modelClass)));
+        if (!\Yii::$app->user->can($action.basename($this->modelClass)))
+        throw new \yii\web\ForbiddenHttpException();
+    }   
 }

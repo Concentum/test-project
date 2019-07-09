@@ -37,6 +37,24 @@ class Document extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'is_deleted' => 'Is Deleted',
+            'is_posted' => 'Is Posted',
+            'version' => 'Version',
+            'date_time' => 'Date Time',
+            'number' => 'Number',
+        ];
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
     public function fields()
     {
         return [
