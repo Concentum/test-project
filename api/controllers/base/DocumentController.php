@@ -21,9 +21,9 @@ class DocumentController extends ActiveController
             $behaviors['corsFilter'] = [
               'class' => \yii\filters\Cors::className(),
             ],
-            $behaviors['authenticator'] = [
+    /*        $behaviors['authenticator'] = [
               'class' => \yii\filters\auth\HttpBearerAuth::className(),
-            ],
+            ], */
         ]);
     }
 
@@ -49,7 +49,7 @@ class DocumentController extends ActiveController
                         ->addRule('date_time', 'string');
                     }
                 ]
-            ], /*
+            ], 
             'create' => [
                 'class' => 'app\controllers\base\actions\CreateAction',
                 'modelClass' => $this->modelClass,
@@ -61,7 +61,7 @@ class DocumentController extends ActiveController
                 'modelClass' => $this->modelClass,
                 'checkAccess' => [$this, 'checkAccess'],
                 'scenario' => $this->updateScenario,
-            ] */
+            ] 
         ]);
     }
 

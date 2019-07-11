@@ -10,7 +10,7 @@ return [
         'counterparty_id' => 2,
         'warehouse_id' => 1,
         'version' => new Expression('NOW()'),
-        'author_id' => 1
+        'author_id' => 1,
     ],
 
     [

@@ -8,5 +8,5 @@ modules:
        - Yii2:
            part: [orm, fixtures]
            entryScript: index.php
-           cleanup: true
+           cleanup: false
            transaction: false

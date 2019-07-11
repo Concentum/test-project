@@ -206,7 +206,12 @@ class m190704_110643_create_functions extends Migration
     {
         echo "m190704_110643_create_functions cannot be reverted.\n";
 
-        return false;
+        $this->execute('DROP FUNCTION IF EXISTS public.document_coming_of_goods_product_tf CASCADE;');
+        $this->execute('DROP FUNCTION IF EXISTS public.document_expend_of_goods_product_tf CASCADE;');
+        $this->execute('DROP FUNCTION IF EXISTS public.document_moving_of_goods_product_tf CASCADE;');
+        $this->execute('DROP FUNCTION IF EXISTS public.good_in_warehouse_tf CASCADE;');
+        $this->execute('DROP FUNCTION IF EXISTS public.recalc CASCADE;');
+      //  return false;
     }
 
     /*

@@ -72,6 +72,15 @@ class m190704_000007_create_document_coming_of_goods_tables extends Migration
             'amount' =>  $this->decimal(10, 2)
         ]);
 
+        $this->addPrimaryKey(
+            'document_coming_of_goods_product-pkey',
+            'document_coming_of_goods_product',
+            [
+                'document_id', 
+                'line_number'
+            ]
+        );
+
         $this->createIndex(
             'document_coming_of_goods_product-document_id-index',
             'document_coming_of_goods_product',

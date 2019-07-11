@@ -2,6 +2,7 @@
 namespace api\tests\api;
 use \api\tests\ApiTester;
 use common\fixtures\DocumentComingOfGoodsFixture;
+use common\fixtures\DocumentComingOfGoodsProductFixture;
 use common\fixtures\TokenFixture;
 use common\fixtures\UserFixture;
 
@@ -21,8 +22,11 @@ class DocumentComingOfGoodsCest
             'document-coming-of-goods' => [
                 'class' => DocumentComingOfGoodsFixture::className(),
                 'dataFile' => codecept_data_dir() . 'document-coming-of-goods.php'
+            ], 
+            'document-coming-of-goods-product' => [
+                'class' => DocumentComingOfGoodsProductFixture::className(),
+                'dataFile' => codecept_data_dir() . 'document-coming-of-goods-product.php'
             ],
-
         ]);
     }
 
@@ -47,6 +51,21 @@ class DocumentComingOfGoodsCest
                 'number' => '00000001',
                 'author' => [
                     'username' => 'erau',
+                ],
+            ]
+        ]);
+    }
+
+    public function indexWithProducts(ApiTester $I)
+    {   
+        $I->amBearerAuthenticated('token-correct');
+        $I->sendGET('/document-coming-of-goods?expand=products');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseContainsJson([
+            [
+                'number' => '00000001',
+                'author' => [
+                    'username' => 'er-au',
                 ],
             ]
         ]);

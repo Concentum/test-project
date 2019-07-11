@@ -74,7 +74,7 @@ class DocumentComingOfGoods extends base\Document
     public function extraFields()
     {
         return array_merge(parent::fields(), [ 
-            'document_coming_of_goods_product' => function ($model) {
+            'products' => function ($model) {
                 return $model->documentComingOfGoodsProduct;
             }, 
         ]);
