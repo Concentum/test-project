@@ -1,20 +1,7 @@
 {
-    "name": "Unknown Property",
-    "message": "Getting unknown property: api\\controllers\\ProductController::searchModel",
+    "name": "Unauthorized",
+    "message": "Your request was made with invalid credentials.",
     "code": 0,
-    "type": "yii\\base\\UnknownPropertyException",
-    "file": "D:\\my-code\\yii2-api-sklad\\vendor\\yiisoft\\yii2\\base\\Component.php",
-    "line": 154,
-    "stack-trace": [
-        "#0 D:\\my-code\\yii2-api-sklad\\api\\controllers\\base\\SimpleReferenceController.php(38): yii\\base\\Component->__get('searchModel')",
-        "#1 D:\\my-code\\yii2-api-sklad\\api\\controllers\\base\\HierarchicalReferenceController.php(19): api\\controllers\\base\\SimpleReferenceController->actions()",
-        "#2 D:\\my-code\\yii2-api-sklad\\api\\controllers\\ProductController.php(21): api\\controllers\\base\\HierarchicalReferenceController->actions()",
-        "#3 D:\\my-code\\yii2-api-sklad\\vendor\\yiisoft\\yii2\\base\\Controller.php(225): api\\controllers\\ProductController->actions()",
-        "#4 D:\\my-code\\yii2-api-sklad\\vendor\\yiisoft\\yii2\\base\\Controller.php(126): yii\\base\\Controller->createAction('index')",
-        "#5 D:\\my-code\\yii2-api-sklad\\vendor\\yiisoft\\yii2\\base\\Module.php(528): yii\\base\\Controller->runAction('index', Array)",
-        "#6 D:\\my-code\\yii2-api-sklad\\vendor\\yiisoft\\yii2\\web\\Application.php(103): yii\\base\\Module->runAction('product/index', Array)",
-        "#7 D:\\my-code\\yii2-api-sklad\\vendor\\yiisoft\\yii2\\base\\Application.php(386): yii\\web\\Application->handleRequest(Object(yii\\web\\Request))",
-        "#8 D:\\my-code\\yii2-api-sklad\\api\\web\\index.php(17): yii\\base\\Application->run()",
-        "#9 {main}"
-    ]
+    "status": 401,
+    "type": "yii\\web\\UnauthorizedHttpException"
 }

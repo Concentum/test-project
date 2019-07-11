@@ -36,7 +36,7 @@ class DocumentComingOfGoodsCest
         ]);
         $I->seeHttpHeader('X-Pagination-Total-Count', 4);
     }
-/*
+
     public function indexWithAuthor(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
@@ -82,5 +82,5 @@ class DocumentComingOfGoodsCest
         $I->sendGET('/document-coming-of-goods/15');
         $I->seeResponseCodeIs(404);
     }
- */  
+ 
 }

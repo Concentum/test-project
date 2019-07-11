@@ -1,7 +1,7 @@
 <?php
 use yii\db\Expression;
 
-return [
+return [ 
     [
         'number' => '00000001',
         'date_time' =>  new Expression('NOW()'),
@@ -22,7 +22,7 @@ return [
         'warehouse_id' => 1,
         'version' => new Expression('NOW()'),
         'author_id' => 2
-    ],
+    ], 
 
     [
         'number' => '00000003',
