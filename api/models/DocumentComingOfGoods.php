@@ -61,7 +61,7 @@ class DocumentComingOfGoods extends base\Document
      * @inheritdoc
      */
     public function fields()
-    {
+    { 
         return array_merge(parent::fields(), [
             'counterparty',
             'warehouse',

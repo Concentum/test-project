@@ -3,7 +3,7 @@ namespace api\models\base;
 
 class DocumentDetail extends \yii\db\ActiveRecord
 {
-    
+    public $primaryKey = ['document_id', 'line_number'];
     /**
      * {@inheritdoc}
      */

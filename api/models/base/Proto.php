@@ -113,7 +113,9 @@ class Proto extends \yii\db\ActiveRecord
 
   public function __get($name)
   {
-    if (!$this->hasAttribute($name) && /* $name !== 'dirtyAttributes' && */ !method_exists($this, 'get'.$name)) {
+    if (!$this->hasAttribute($name) && 
+       // $name !== 'dirtyAttributes' && 
+        !method_exists($this, 'get'.$name)) {
         $value = ArrayHelper::map($this->props, 'property_name', 'value')[$name];
     } else {
       $value = parent::__get($name);
@@ -133,5 +135,5 @@ class Proto extends \yii\db\ActiveRecord
       parent::__set($name, $value);
     }
   }
-
+ 
 }

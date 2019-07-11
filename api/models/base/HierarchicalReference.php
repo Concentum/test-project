@@ -10,9 +10,9 @@ namespace api\models\base;
  */
 class HierarchicalReference extends SimpleReference
 {
-   
+  
     public function fields()
-    {
+    { 
         return array_merge(parent::fields(), [
             'is_folder',
             'parent_id',
@@ -23,14 +23,14 @@ class HierarchicalReference extends SimpleReference
      * {@inheritdoc}
      */
     public function rules()
-    {
+    {  
         return array_merge(parent::rules(), [
             [['is_folder'], 'boolean'],
             [['parent_id'], 'default', 'value' => null],
             [['parent_id'], 'integer'],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => $this::className(), 'targetAttribute' => ['parent_id' => 'id']],
         ]);
-    }
+    } 
 
     /**
      * {@inheritdoc}

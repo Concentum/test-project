@@ -46,7 +46,7 @@ class Warehouse extends base\SimpleReference
      * @inheritdoc
      */
     public function fields()
-    {
+    {  
         return array_merge(parent::fields(), [
         ]);
     }

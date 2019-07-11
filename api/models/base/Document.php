@@ -3,6 +3,7 @@
 namespace api\models\base;
 
 use Yii;
+use api\models\User;
 
 /**
  * This is the model class for table "document_coming_of_goods".
@@ -62,7 +63,18 @@ class Document extends \yii\db\ActiveRecord
             'date_time',
             'version',
             'is_deleted',
-            'is_posted'
+            'is_posted',
+            'author'
+        ];
+    } 
+
+    /**
+     * {@inheritdoc}
+     */
+    public function extraFields()
+    {
+        return [
+            'author'
         ];
     }
 
@@ -82,5 +94,13 @@ class Document extends \yii\db\ActiveRecord
     public function getRepresentation()
     {
        return $this->number.' оf '.$this->date_time;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuthor()
+    {
+        return $this->hasOne(User::className(), ['id' => 'author_id']);
     }
 }

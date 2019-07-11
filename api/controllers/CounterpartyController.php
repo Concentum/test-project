@@ -15,10 +15,11 @@ class CounterpartyController extends base\HierarchicalReferenceController
         return array_merge(parent::behaviors(), [
         ]);
     }
-    
+/*    
     public function actions()
-    {
+    {  \Yii::info(parent::actions());
        return array_merge(parent::actions(), [
        ]);
     }
+*/    
 }

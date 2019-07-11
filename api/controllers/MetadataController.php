@@ -50,7 +50,10 @@ class MetadataController extends Controller
                         }
                     }
                     foreach($tmp as $i => $attr) {
-                        $md[$key][$entity]['attributes'][$attr]['validators'] = $valueValidator; //basename($valueValidator->targetClass);
+                        if (isset($valueValidator->targetClass)) {
+                            $valueValidator->targetClass = basename($valueValidator->targetClass);
+                        }
+                        $md[$key][$entity]['attributes'][$attr]['validators'] = $valueValidator; 
                     }
                 }
                 if (method_exists($model, 'details')) {
@@ -69,7 +72,10 @@ class MetadataController extends Controller
                                 }
                             }
                             foreach($tmp as $i => $attr) {
-                                $md[$key][$entity]['details'][$detailKey]['attributes'][$attr]['validators'] = $valueValidator; //basename($valueValidator->targetClass);
+                                if (isset($valueValidator->targetClass)) {
+                                    $valueValidator->targetClass = basename($valueValidator->targetClass);
+                                }
+                                $md[$key][$entity]['details'][$detailKey]['attributes'][$attr]['validators'] = $valueValidator;
                             }
                         }
                     }   

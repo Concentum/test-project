@@ -14,8 +14,9 @@ use api\models\User;
  * @property string $description
  *
  */
-class SimpleReference extends Proto
+class SimpleReference extends \yii\db\ActiveRecord //Proto
 {
+    
     public function fields()
     {
         return array_merge(parent::fields(), [
@@ -24,7 +25,6 @@ class SimpleReference extends Proto
             'code',
             'description',
             'version',
-            'author'
         ]);
     }
 

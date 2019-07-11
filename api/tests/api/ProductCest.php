@@ -56,7 +56,7 @@ class ProductCest
     public function search(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/products?filter[description][like]=MacBook');
+        $I->sendGET('/products?filter[description][like]=MacBook&filter[is_folder]=0');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             ['description' => 'Ноутбук Apple MacBook Air'],
