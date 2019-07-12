@@ -21,9 +21,9 @@ class DocumentController extends ActiveController
             $behaviors['corsFilter'] = [
               'class' => \yii\filters\Cors::className(),
             ],
-    /*        $behaviors['authenticator'] = [
+            $behaviors['authenticator'] = [
               'class' => \yii\filters\auth\HttpBearerAuth::className(),
-            ], */
+            ],
         ]);
     }
 
@@ -51,13 +51,13 @@ class DocumentController extends ActiveController
                 ]
             ], 
             'create' => [
-                'class' => 'app\controllers\base\actions\CreateAction',
+                'class' => 'api\controllers\base\actions\CreateAction',
                 'modelClass' => $this->modelClass,
                 'checkAccess' => [$this, 'checkAccess'],
                 'scenario' => $this->updateScenario,
             ],
             'update' => [
-                'class' => 'app\controllers\base\actions\UpdateAction',
+                'class' => 'api\controllers\base\actions\UpdateAction',
                 'modelClass' => $this->modelClass,
                 'checkAccess' => [$this, 'checkAccess'],
                 'scenario' => $this->updateScenario,

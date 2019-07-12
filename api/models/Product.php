@@ -46,9 +46,10 @@ class Product extends base\HierarchicalReference
      * @inheritdoc
      */
     public function fields()
-    {
-        return array_merge(parent::fields(), [
-        ]);
+    { 
+        return [
+            'id', 'is_deleted', 'is_folder', 'parent_id', 'code', 'description'
+        ];
     }
 
     /**

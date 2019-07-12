@@ -47,7 +47,17 @@ class Warehouse extends base\SimpleReference
      */
     public function fields()
     {  
-        return array_merge(parent::fields(), [
+        return [
+            'id', 'is_deleted', 'code', 'description'
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */  
+    public function extraFields()
+    {
+        return array_merge(parent::extraFields(), [
         ]);
     }
 }

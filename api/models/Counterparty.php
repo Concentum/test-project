@@ -48,7 +48,17 @@ class Counterparty extends base\HierarchicalReference
      */
     public function fields()
     {
-        return array_merge(parent::fields(), [
+        return [
+            'id', 'is_deleted', 'is_folder', 'parent_id', 'code', 'description'
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */  
+    public function extraFields()
+    {
+        return array_merge(parent::extraFields(), [
         ]);
     }
 }

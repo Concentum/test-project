@@ -4,6 +4,9 @@ namespace api\models\base;
 
 use Yii;
 use api\models\User;
+use yii\behaviors\TimestampBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "document_coming_of_goods".
@@ -23,7 +26,26 @@ use api\models\User;
  */
 class Document extends \yii\db\ActiveRecord
 {
-    
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'author_id',
+                'updatedByAttribute' => false,
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'version',
+                'updatedAtAttribute' => 'version',
+                'value' => new Expression('NOW()'),
+            ],
+        ]);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -64,7 +86,6 @@ class Document extends \yii\db\ActiveRecord
             'version',
             'is_deleted',
             'is_posted',
-            'author'
         ];
     } 
 

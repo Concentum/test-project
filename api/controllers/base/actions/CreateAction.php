@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\Url;
 use yii\web\ServerErrorHttpException;
+use yii\rest\Action;
 
 /**
  * CreateAction implements the API endpoint for creating a new model from the given data.
@@ -42,8 +43,19 @@ class CreateAction extends Action
             'scenario' => $this->scenario,
         ]);
 
-        $model->load(Yii::$app->getRequest()->getBodyParams(), '');
+        $params = Yii::$app->getRequest()->getBodyParams();
+        $model->load($params, '');
         if ($model->save()) {
+
+            foreach($model->details as $key => $detail) {
+                if (!isset($params[$key])|| !is_array($params[$key])) continue;
+                foreach($params[$key] as $row) {
+                    $rowDetail = new $detail();
+                    $rowDetail->load($row, '');
+                    $model->link(lcfirst(basename($detail)), $rowDetail);
+                }
+            }
+
             $response = Yii::$app->getResponse();
             $response->setStatusCode(201);
             $id = implode(',', array_values($model->getPrimaryKey(true)));

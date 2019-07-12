@@ -1,9 +1,9 @@
 <?php
 namespace api\tests\api;
 use \api\tests\ApiTester;
-use common\fixtures\CounterpartyFixture;
-use common\fixtures\TokenFixture;
-use common\fixtures\UserFixture;
+use api\fixtures\CounterpartyFixture;
+use api\fixtures\TokenFixture;
+use api\fixtures\UserFixture;
 
 class CounterpartyCest
 {
@@ -103,7 +103,7 @@ class CounterpartyCest
         ]);
         $I->seeResponseCodeIs(201);
         $I->seeResponseContainsJson([
-            'author_id' => 1,
+            'code' => '00000004',
             'description' => 'New Counterparty',
         ]);
     }

@@ -25,12 +25,7 @@ class DocumentMovingOfGoods extends base\Document
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
-            [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'author_id',
-                'updatedByAttribute' => false,
-            ],
-        ]);;
+        ]);
     }
     
     /**
@@ -62,7 +57,27 @@ class DocumentMovingOfGoods extends base\Document
      */
     public function fields()
     {
-        return array_merge(parent::fields(), [
+        return [
+            'id',
+            'is_deleted',
+            'is_posted',
+            'number',
+            'date_time',
+            'source',
+            'desctination',
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function extraFields()
+    {
+        return array_merge(parent::fields(), [ 
+            'products' => function ($model) {
+                return $model->documentMovingOfGoodsProduct;
+            },
+            'author' 
         ]);
     }
 
@@ -90,7 +105,7 @@ class DocumentMovingOfGoods extends base\Document
         return $this->hasMany(DocumentMovingOfGoodsProduct::className(), ['document_id' => 'id']);
     }
 
-    public static function details()
+    public static function getDetails()
     {
         return [
             'products' => DocumentMovingOfGoodsProduct::className() 

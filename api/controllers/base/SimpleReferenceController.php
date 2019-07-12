@@ -21,9 +21,9 @@ class SimpleReferenceController extends ActiveController
             $behaviors['corsFilter'] = [
               'class' => \yii\filters\Cors::className(),
             ],
-    /*        $behaviors['authenticator'] = [
+            $behaviors['authenticator'] = [
               'class' => \yii\filters\auth\HttpBearerAuth::className(),
-            ], */
+            ],
         ]); 
     }
 

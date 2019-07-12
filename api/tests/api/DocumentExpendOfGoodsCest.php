@@ -1,13 +1,13 @@
 <?php
 namespace api\tests\api;
 use \api\tests\ApiTester;
-use api\fixtures\DocumentComingOfGoodsFixture;
-use api\fixtures\DocumentComingOfGoodsProductFixture;
+use api\fixtures\DocumentExpendOfGoodsFixture;
+use api\fixtures\DocumentExpendOfGoodsProductFixture;
 use api\fixtures\TokenFixture;
 use api\fixtures\UserFixture;
 use yii\db\Expression;
 
-class DocumentComingOfGoodsCest
+class DocumentExpendOfGoodsCest
 {
     public function _before(ApiTester $I)
     {
@@ -20,13 +20,13 @@ class DocumentComingOfGoodsCest
                 'class' => TokenFixture::className(),
                 'dataFile' => codecept_data_dir() . 'token.php'
             ],
-            'document-coming-of-goods' => [
-                'class' => DocumentComingOfGoodsFixture::className(),
-                'dataFile' => codecept_data_dir() . 'document-coming-of-goods.php'
+            'document-Expend-of-goods' => [
+                'class' => DocumentExpendOfGoodsFixture::className(),
+                'dataFile' => codecept_data_dir() . 'document-expend-of-goods.php'
             ], 
-            'document-coming-of-goods-product' => [
-                'class' => DocumentComingOfGoodsProductFixture::className(),
-                'dataFile' => codecept_data_dir() . 'document-coming-of-goods-product.php'
+            'document-expend-of-goods-product' => [
+                'class' => DocumentExpendOfGoodsProductFixture::className(),
+                'dataFile' => codecept_data_dir() . 'document-expend-of-goods-product.php'
             ],
         ]);
     }
@@ -34,7 +34,7 @@ class DocumentComingOfGoodsCest
     public function index(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-coming-of-goods');
+        $I->sendGET('/document-expend-of-goods');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             ['number' => '00000001'],
@@ -45,7 +45,7 @@ class DocumentComingOfGoodsCest
     public function indexWithAuthor(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-coming-of-goods?expand=author');
+        $I->sendGET('/document-expend-of-goods?expand=author');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             [
@@ -60,7 +60,7 @@ class DocumentComingOfGoodsCest
     public function search(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-coming-of-goods?filter[number][like]=00000001');
+        $I->sendGET('/document-expend-of-goods?filter[number][like]=00000001');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             ['number' => '00000001'],
@@ -74,7 +74,7 @@ class DocumentComingOfGoodsCest
     public function view(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-coming-of-goods/1');
+        $I->sendGET('/document-expend-of-goods/1');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             'number' => '00000001',
@@ -84,7 +84,7 @@ class DocumentComingOfGoodsCest
     public function viewWithProductsAndAuthor(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-coming-of-goods/1?expand=products,author');
+        $I->sendGET('/document-expend-of-goods/1?expand=products,author');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             'number' => '00000001',
@@ -105,13 +105,13 @@ class DocumentComingOfGoodsCest
     public function viewNotFound(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-coming-of-goods/15');
+        $I->sendGET('/document-expend-of-goods/15');
         $I->seeResponseCodeIs(404);
     }
  
     public function createUnauthorized(ApiTester $I)
     {
-        $I->sendPOST('/document-coming-of-goods', [
+        $I->sendPOST('/document-expend-of-goods', [
             'number' => '00000005',
             'warehouse_id' => '1',
             'counterparty_id' => '2',
@@ -122,7 +122,7 @@ class DocumentComingOfGoodsCest
     public function create(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
-        $I->sendPOST('/document-coming-of-goods', [
+        $I->sendPOST('/document-expend-of-goods', [
             'number' => '00000005',
             'warehouse_id' => '1',
             'counterparty_id' => '2',
@@ -144,7 +144,7 @@ class DocumentComingOfGoodsCest
 
     public function updateUnauthorized(ApiTester $I)
     {
-        $I->sendPATCH('/document-coming-of-goods/1', [
+        $I->sendPATCH('/document-expend-of-goods/1', [
             'counterparty_id' => 3,
         ]);
         $I->seeResponseCodeIs(401);
@@ -153,7 +153,7 @@ class DocumentComingOfGoodsCest
     public function update(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
-        $I->sendPATCH('/document-coming-of-goods/1', [
+        $I->sendPATCH('/document-expend-of-goods/1', [
             'counterparty_id' => 3,
             'products' => [
                 0 => [
@@ -176,7 +176,7 @@ class DocumentComingOfGoodsCest
     public function updateForbidden(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-of-user-without-permission');
-        $I->sendPATCH('/document-coming-of-goods/1', [
+        $I->sendPATCH('/document-expend-of-goods/1', [
             'counterparty_id' => 3
         ]);
         $I->seeResponseCodeIs(403);
@@ -184,21 +184,21 @@ class DocumentComingOfGoodsCest
 
     public function deleteUnauthorized(ApiTester $I)
     {
-        $I->sendDELETE('/document-coming-of-goods/1');
+        $I->sendDELETE('/document-expend-of-goods/1');
         $I->seeResponseCodeIs(401);
     }
 
     public function delete(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
-        $I->sendDELETE('/document-coming-of-goods/1');
+        $I->sendDELETE('/document-expend-of-goods/1');
         $I->seeResponseCodeIs(204);
     }
 
     public function deleteForbidden(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-of-user-without-permission');
-        $I->sendDELETE('/document-coming-of-goods/1');
+        $I->sendDELETE('/document-expend-of-goods/1');
         $I->seeResponseCodeIs(403);
     }
    

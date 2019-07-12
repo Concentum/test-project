@@ -1,8 +1,8 @@
 <?php
 namespace api\tests\api;
 use \api\tests\ApiTester;
-use common\fixtures\TokenFixture;
-use common\fixtures\UserFixture;
+use api\fixtures\TokenFixture;
+use api\fixtures\UserFixture;
 use api\models\User;
 class ProfileCest
 { /*

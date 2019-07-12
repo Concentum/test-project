@@ -14,8 +14,8 @@ class HierarchicalReference extends SimpleReference
     public function fields()
     { 
         return array_merge(parent::fields(), [
-            'is_folder',
-            'parent_id',
+            'is_folder' => 'is_folder',
+            'parent_id' => 'parent_id',
         ]);
     }
 

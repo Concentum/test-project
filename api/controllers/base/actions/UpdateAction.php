@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use yii\db\ActiveRecord;
 use yii\web\ServerErrorHttpException;
+use yii\rest\Action;
 
 /**
  * UpdateAction implements the API endpoint for updating a model.
@@ -45,11 +46,12 @@ class UpdateAction extends Action
             throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
         } else {
             foreach($model->details as $key => $detail) {
+                if (!isset($params[$key]) || !is_array($params[$key])) continue;
                 $detail::deleteAll(['document_id' => $model->id]);
                 foreach($params[$key] as $row) {
-                    $row = new $detail();
-                    $row->load($detail, '');
-                    $model->link(basename($detail), $row);
+                    $rowDetail = new $detail();
+                    $rowDetail->load($row, '');
+                    $model->link(lcfirst(basename($detail)), $rowDetail);
                 }
             }
         }

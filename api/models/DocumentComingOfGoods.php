@@ -1,8 +1,6 @@
 <?php
 namespace api\models;
 
-use yii\behaviors\TimestampBehavior;
-use yii\behaviors\BlameableBehavior;
 /**
  * This is the model class for table "document_coming_of_goods".
  *
@@ -25,11 +23,6 @@ class DocumentComingOfGoods extends base\Document
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
-            [
-                'class' => BlameableBehavior::className(),
-                'createdByAttribute' => 'author_id',
-                'updatedByAttribute' => false,
-            ],
         ]);
     }
     
@@ -62,10 +55,15 @@ class DocumentComingOfGoods extends base\Document
      */
     public function fields()
     { 
-        return array_merge(parent::fields(), [
+        return [
+            'id',
+            'is_deleted',
+            'is_posted',
+            'number',
+            'date_time',
             'counterparty',
             'warehouse',
-        ]);
+        ];
     }
 
     /**
@@ -76,7 +74,8 @@ class DocumentComingOfGoods extends base\Document
         return array_merge(parent::fields(), [ 
             'products' => function ($model) {
                 return $model->documentComingOfGoodsProduct;
-            }, 
+            },
+            'author'
         ]);
     }
 
@@ -104,7 +103,7 @@ class DocumentComingOfGoods extends base\Document
         return $this->hasMany(DocumentComingOfGoodsProduct::className(), ['document_id' => 'id']);
     }
 
-    public static function details()
+    public static function getDetails()
     {
         return [
             'products' => DocumentComingOfGoodsProduct::className() 

@@ -18,7 +18,7 @@ class SimpleReference extends \yii\db\ActiveRecord //Proto
 {
     
     public function fields()
-    {
+    {  // \Yii::info('!!!!!');\Yii::info(parent::fields());
         return array_merge(parent::fields(), [
             'id',
             'is_deleted',
