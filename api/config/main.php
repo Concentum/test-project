@@ -60,7 +60,7 @@ return [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'warehouse'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'document-coming-of-goods'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'document-expend-of-goods'],
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'document-move-of-goods'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'document-moving-of-goods'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'object-property'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'property-value'],
             ],

@@ -34,7 +34,7 @@ class WarehouseCest
             ['description' => 'Склад №1'],
             ['description' => 'Склад №2'],
         ]);
-        $I->seeHttpHeader('X-Pagination-Total-Count', 2);
+        $I->seeHttpHeader('X-Pagination-Total-Count', 3);
     }
 
     public function indexWithAuthor(ApiTester $I)

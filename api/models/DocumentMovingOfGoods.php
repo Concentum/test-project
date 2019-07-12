@@ -36,8 +36,8 @@ class DocumentMovingOfGoods extends base\Document
         return array_merge(parent::rules(), [
             [['source_id', 'destination_id'], 'integer'],
             [['source_id', 'destination_id'], 'required'],
-            [['source_id'], 'exist', 'skipOnError' => true, 'targetClass' => Warehouse::className(), 'targetAttribute' => ['warehouse_id' => 'id']],
-            [['destination_id'], 'exist', 'skipOnError' => true, 'targetClass' => Warehouse::className(), 'targetAttribute' => ['warehouse_id' => 'id']],
+            [['source_id'], 'exist', 'skipOnError' => true, 'targetClass' => Warehouse::className(), 'targetAttribute' => ['source_id' => 'id']],
+            [['destination_id'], 'exist', 'skipOnError' => true, 'targetClass' => Warehouse::className(), 'targetAttribute' => ['destination_id' => 'id']],
         ]);
     }
 
@@ -64,7 +64,7 @@ class DocumentMovingOfGoods extends base\Document
             'number',
             'date_time',
             'source',
-            'desctination',
+            'destination',
         ];
     }
 
