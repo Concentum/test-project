@@ -9,7 +9,7 @@ $config = [
     ],
 ];
 
-if (!YII_ENV_TEST) {
+//if (!YII_ENV_TEST) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
@@ -21,6 +21,6 @@ if (!YII_ENV_TEST) {
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
     ];
-}
+//}
 
 return $config;

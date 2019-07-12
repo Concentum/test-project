@@ -3,10 +3,10 @@ modules:
    enabled:
        - REST:
            depends: PhpBrowser
-           url: 'http://127.0.0.1:8080/index.php'
+           url: 'http://127.0.0.1:8081/index-test.php'
            part: [json]
        - Yii2:
            part: [orm, fixtures]
-           entryScript: index.php
+           entryScript: index-test.php
            cleanup: false
            transaction: false

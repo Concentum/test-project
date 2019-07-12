@@ -2,7 +2,7 @@
 return [
     'components' => [
         'db' => [ 
-            'dsn' => 'pgsql:host=localhost;dbname=yii2-api-sklad',
+            'dsn' => 'pgsql:host=localhost;dbname=yii2-api-sklad-test',
             'username' => 'postgres',
             'password' => 'secret',
           //  'charset' => 'utf8',
