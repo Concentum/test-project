@@ -31,7 +31,9 @@ class m190708_165617_insert_rbac_data extends Migration
             'Warehouse',
             'DocumentComingOfGoods',
             'DocumentExpendOfGoods',
-            'DocumentMovingOfGoods'
+            'DocumentMovingOfGoods',
+            'ObjectProperty',
+            'PropertyValue'
         ];
 
         $actions = ['view', 'create', 'update', 'delete'];

@@ -3,6 +3,8 @@ namespace api\tests\api;
 use \api\tests\ApiTester;
 use api\fixtures\DocumentMovingOfGoodsFixture;
 use api\fixtures\DocumentMovingOfGoodsProductFixture;
+use api\fixtures\ProductFixture;
+use api\fixtures\WarehouseFixture;
 use api\fixtures\TokenFixture;
 use api\fixtures\UserFixture;
 use yii\db\Expression;
@@ -27,6 +29,14 @@ class DocumentMovingOfGoodsCest
             'document-moving-of-goods-product' => [
                 'class' => DocumentMovingOfGoodsProductFixture::className(),
                 'dataFile' => codecept_data_dir() . 'document-moving-of-goods-product.php'
+            ],
+            'product' => [
+                'class' => ProductFixture::className(),
+                'dataFile' => codecept_data_dir() . 'product.php'
+            ],
+            'warehouse' => [
+                'class' => WarehouseFixture::className(),
+                'dataFile' => codecept_data_dir() . 'warehouse.php'
             ],
         ]);
     }

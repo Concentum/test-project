@@ -3,6 +3,9 @@ namespace api\tests\api;
 use \api\tests\ApiTester;
 use api\fixtures\DocumentExpendOfGoodsFixture;
 use api\fixtures\DocumentExpendOfGoodsProductFixture;
+use api\fixtures\ProductFixture;
+use api\fixtures\CounterpartyFixture;
+use api\fixtures\WarehouseFixture;
 use api\fixtures\TokenFixture;
 use api\fixtures\UserFixture;
 use yii\db\Expression;
@@ -27,6 +30,18 @@ class DocumentExpendOfGoodsCest
             'document-expend-of-goods-product' => [
                 'class' => DocumentExpendOfGoodsProductFixture::className(),
                 'dataFile' => codecept_data_dir() . 'document-expend-of-goods-product.php'
+            ],
+            'product' => [
+                'class' => ProductFixture::className(),
+                'dataFile' => codecept_data_dir() . 'product.php'
+            ],
+            'warehouse' => [
+                'class' => WarehouseFixture::className(),
+                'dataFile' => codecept_data_dir() . 'warehouse.php'
+            ],
+            'counterparty' => [
+                'class' => CounterpartyFixture::className(),
+                'dataFile' => codecept_data_dir() . 'counterparty.php'
             ],
         ]);
     }
