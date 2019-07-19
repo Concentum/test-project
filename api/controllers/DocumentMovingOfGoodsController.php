@@ -19,20 +19,23 @@ class DocumentMovingOfGoodsController extends base\DocumentController
     public function actions()
     {
         return array_merge(parent::actions(), [
-            $actions['index'] = [
+            'index' => [
                 'class' => 'yii\rest\IndexAction',
                 'modelClass' => $this->modelClass,
                 'dataFilter' => [
                     'class' => \yii\data\ActiveDataFilter::class,
-                    'searchModel' => function () {
-                        return (new \yii\base\DynamicModel([
-                            'source_id' => null,
-                            'destination_id' => null,
-                        ]))->addRule('source_id', 'integer')
-                        ->addRule('destination_id', 'integer');
-                    }
+                    'searchModel' => $this->searchModel()
                 ]
             ]
         ]);    
     }
+
+    public function searchModel()
+    {
+        $sm = parent::searchModel();
+        $sm->addRule(['source_id', 'destination_id'], 'integer');
+        $sm->defineAttribute('source_id', $value = null);
+        $sm->defineAttribute('destination_id', $value = null);
+        return $sm;
+    }    
 }

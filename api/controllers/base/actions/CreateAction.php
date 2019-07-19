@@ -6,6 +6,9 @@ use yii\base\Model;
 use yii\helpers\Url;
 use yii\web\ServerErrorHttpException;
 use yii\rest\Action;
+use yii\base\DynamicModel;
+use api\models\ObjectProperty;
+use api\models\PropertyValue;
 
 /**
  * CreateAction implements the API endpoint for creating a new model from the given data.
@@ -45,25 +48,96 @@ class CreateAction extends Action
 
         $params = Yii::$app->getRequest()->getBodyParams();
         $model->load($params, '');
-        if ($model->save()) {
-
+        $errors = [];
+        if (!$model->validate()) {
+            $errors[] = $model->errors;
+        }
+        
+        if (isset($model->details)) {
             foreach($model->details as $key => $detail) {
                 if (!isset($params[$key])|| !is_array($params[$key])) continue;
                 foreach($params[$key] as $row) {
                     $rowDetail = new $detail();
                     $rowDetail->load($row, '');
-                    $model->link(lcfirst(basename($detail)), $rowDetail);
+                    if (!$rowDetail->validate()) {
+                        $errors[$key][] = $rowDetail->errors;
+                    }
+                    $rows[$key][] = $row;
                 }
             }
-
-            $response = Yii::$app->getResponse();
-            $response->setStatusCode(201);
-            $id = implode(',', array_values($model->getPrimaryKey(true)));
-            $response->getHeaders()->set('Location', Url::toRoute([$this->viewAction, 'id' => $id], true));
-        } elseif (!$model->hasErrors()) {
-            throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
         }
 
+        if (isset($params['properties']) && is_array($params['properties'])) {
+            foreach($params['properties'] as $property) {
+                if ($op = ObjectProperty::findOne([
+                    'object_class' => $this->modelClass,
+                    'property_name' => $property['name']
+                ])) {
+                    $dm = new yii\base\DynamicModel(['value' => $property['value']]);
+                    if (isset($op->rules) && is_array(json_decode($op->rules))) {
+                        \Yii::info($op->rules);
+                        foreach(json_decode($op->rules) as $rule) {
+                            $dm->addRule($rule);
+                        }
+                        if (!$dm->validate()) {
+                            $errors[] = $dm->errors;
+                        }
+                    }
+                    $props[] = [
+                        'object_id' => null,
+                        'property_id' => $op->id,
+                        'value' => $property['value']
+                    ];
+                }    
+            }
+        }    
+
+        if (count($errors) > 0) {
+            \Yii::info('Model not inserted due to validation error.', __METHOD__);
+            \Yii::$app->response->setStatusCode(422, 'Data Validation Failed.');
+            \Yii::info($errors);
+            return $errors;
+        } else {
+            try {
+                $transaction = \Yii::$app->db->beginTransaction();
+                try {
+                    if ($model->insert(false)) {
+                        if (isset($model->details)) {
+                            foreach($model->details as $key => $detail) {
+                                foreach($rows[$key] as $k => $val) {
+                                    $rows[$key][$k][$detail::$ownerForeignKey] = $model->id;
+                                }
+                        /*        \Yii::info(array_keys($rows[$key][0]));
+                                \Yii::info(array_values($rows[$key])); */
+                                \Yii::$app->db->createCommand()->batchInsert($detail::tableName(), array_keys($rows[$key][0]), array_values($rows[$key]))->execute();
+                            }
+                        }
+                        if (isset($props) && is_array($props) && count($props) > 0) {
+                            foreach($props as $k => $val) {
+                                $props[$k]['object_id'] = $model->id;
+                            }
+                            \Yii::$app->db->createCommand()->batchInsert(PropertyValue::tableName(), array_keys($props[0]), array_values($props))->execute();
+                        }
+                        $transaction->commit();
+                    } else {
+                        $transaction->rollBack();    
+                    }
+                } catch (\Exception $e) {
+                    $transaction->rollBack();
+                    throw $e;
+                } catch (\Throwable $e) {
+                    $transaction->rollBack();
+                    throw $e;
+                }
+            } catch (\Exception $e) {
+                throw new ServerErrorHttpException('Failed to create the object for unknown reason.'); 
+            }
+        }
+
+        $response = Yii::$app->getResponse();
+        $response->setStatusCode(201);
+        $id = implode(',', array_values($model->getPrimaryKey(true)));
+        $response->getHeaders()->set('Location', Url::toRoute([$this->viewAction, 'id' => $id], true));    
         return $model;
     }
 }

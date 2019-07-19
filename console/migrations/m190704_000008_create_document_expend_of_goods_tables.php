@@ -119,29 +119,34 @@ class m190704_000008_create_document_expend_of_goods_tables extends Migration
                 check_query_string text;
                 result text; 
             BEGIN
-                query_string = "INSERT INTO goods_in_warehouses(period, product_id, warehouse_id, quantity, op, recorder_id, recorder_type) 
-                SELECT m.date, d.product_id, m.warehouse_id, -d.quantity as quantity, 2, m.id, 2
-                FROM document_expend_of_goods m RIGHT JOIN document_expend_of_goods_detail d ON m.id = d.doc_id
-                WHERE m.id="|| NEW.id; 
+                query_string = \'
+                INSERT INTO goods_in_warehouse(period, product_id, warehouse_id, quantity, op, recorder_id, recorder_type) 
+                    SELECT m.date_time, d.product_id, m.warehouse_id, SUM(-d.quantity) as quantity, 2, m.id, 2
+                    FROM document_expend_of_goods m RIGHT JOIN document_expend_of_goods_product d ON m.id = d.document_id
+                    WHERE m.id=\'|| NEW.id ||\' 
+                    GROUP BY m.date_time, d.product_id, m.warehouse_id, 2, m.id, 2 \'; 
 
-                check_query_string  = "select t1.product_id, t1.warehouse_id,  t1.period, t2.quantity - t3.quantity 
-                from (
-                select max(period) as period, product_id, warehouse_id
-                from goods_in_warehouses_total
-                where product_id in (select product_id from document_expend_of_goods_detail where doc_id = "|| NEW.id ||") 
-                  and warehouse_id ="|| NEW.warehouse_id ||"
-                group by product_id, warehouse_id
-                ) t1 join goods_in_warehouses_total t2 on t1.period = t2.period and t1.product_id = t2.product_id and t1.warehouse_id = t2.warehouse_id
-                join document_expend_of_goods_detail t3 on t1.product_id = t3.product_id
-                where t2.quantity - t3.quantity < 0";
+                check_query_string  = \'
+                SELECT t1.product_id, t1.warehouse_id, t1.period, t2.quantity - t3.quantity 
+                FROM (
+                    SELECT MAX(period) AS period, product_id, warehouse_id
+                        FROM goods_in_warehouse_total
+                        WHERE product_id in (
+                            SELECT product_id 
+                            FROM document_expend_of_goods_product WHERE document_id = \'|| NEW.id ||\') 
+                            AND warehouse_id =\'|| NEW.warehouse_id ||\'
+                            GROUP BY product_id, warehouse_id
+                    ) t1 JOIN goods_in_warehouse_total t2 ON t1.period = t2.period AND t1.product_id = t2.product_id                                                           AND t1.warehouse_id = t2.warehouse_id
+                JOIN document_expend_of_goods_product t3 ON t1.product_id = t3.product_id
+                WHERE t2.quantity - t3.quantity < 0\';
 
-                IF TG_OP = "UPDATE" THEN
-                    IF OLD.status = 1 AND NEW.status = 1 THEN
+                IF TG_OP = \'UPDATE\' THEN
+                    IF OLD.is_posted = true AND NEW.is_posted = true THEN
                         RAISE;
-                    ELSIF OLD.status = 1 AND NEW.status = 0 THEN
-                        DELETE FROM goods_in_warehouses where recorder_id = NEW.id AND recorder_type = 2;
+                    ELSIF OLD.is_posted = true AND NEW.is_posted = false THEN
+                        DELETE FROM goods_in_warehouse where recorder_id = NEW.id AND recorder_type = 2;
                         RETURN NEW;
-                    ELSIF OLD.status = 0 AND NEW.status = 1 THEN
+                    ELSIF OLD.is_posted = false AND NEW.is_posted = true THEN
                         EXECUTE check_query_string INTO result;
                         IF result IS  NOT NULL THEN 
                             RAISE;
@@ -151,14 +156,14 @@ class m190704_000008_create_document_expend_of_goods_tables extends Migration
                     ELSE 
                         RETURN NEW;
                     END IF;  
-                ELSIF TG_OP = "INSERT" THEN
-                    IF NEW.is_posted = 1 THEN
-                        RAISE;
+                ELSIF TG_OP = \'INSERT\' THEN
+                    IF NEW.is_posted = true THEN
+                        RAISE ;
                     ELSE 
                         RETURN NEW;
                     END IF;  
-                ELSIF TG_OP = "DELETE" THEN
-                    IF OLD.is_posted = 1 THEN
+                ELSIF TG_OP = \'DELETE\' THEN
+                    IF OLD.is_posted = true THEN
                         RAISE;
                     ELSE 
                         RETURN OLD;
@@ -173,7 +178,7 @@ class m190704_000008_create_document_expend_of_goods_tables extends Migration
                 AS $$DECLARE
                 ROW RECORD;
             BEGIN
-                ROW = CASE WHEN TG_OP = "DELETE" THEN OLD ELSE NEW END;
+                ROW = CASE WHEN TG_OP = \'DELETE\' THEN OLD ELSE NEW END;
                 IF (SELECT is_posted FROM document_expend_of_goods WHERE document_expend_of_goods.id = ROW.document_id) = true
                 THEN 
                     RAISE;
@@ -183,6 +188,18 @@ class m190704_000008_create_document_expend_of_goods_tables extends Migration
             END;$$;
         ');
 
+        $this->execute('
+            CREATE TRIGGER document_expend_of_goods_product_trigger 
+            BEFORE INSERT OR DELETE OR UPDATE ON public.document_expend_of_goods_product
+            FOR EACH ROW EXECUTE PROCEDURE public.document_expend_of_goods_product_tf();
+        ');
+
+        $this->execute('
+            CREATE TRIGGER document_expend_of_goods_trigger 
+            BEFORE INSERT OR DELETE OR UPDATE ON public.document_expend_of_goods 
+            FOR EACH ROW EXECUTE PROCEDURE public.document_expend_of_goods_tf();
+        ');
+
     }
 
     /**
@@ -190,8 +207,12 @@ class m190704_000008_create_document_expend_of_goods_tables extends Migration
      */
     public function safeDown()
     {   
+        $this->execute('DROP TRIGGER IF EXISTS document_expend_of_goods_product_trigger;');
+        $this->execute('DROP TRIGGER IF EXISTS document_expend_of_goods_trigger;');
+        
         $this->execute('DROP FUNCTION IF EXISTS public.document_expend_of_goods_product_tf CASCADE;');
         $this->execute('DROP FUNCTION IF EXISTS public.document_expend_of_goods_tf CASCADE;');
+        
         $this->dropTable('{{%document_expend_of_goods_product}}');
         $this->dropTable('{{%document_expend_of_goods}}');
     }

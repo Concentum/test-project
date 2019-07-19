@@ -118,17 +118,17 @@ class m190704_000006_create_document_moving_of_goods_tables extends Migration
                 AS $$DECLARE
                 query_string text;
             BEGIN
-                IF TG_OP <> "DELETE" THEN 
-                    query_string = "INSERT INTO goods_in_warehouse(period, product_id, warehouse_id, quantity, op, recorder_id, recorder_type) 
-                    SELECT m.date, d.product_id, m.warehouse_id, d.quantity, 1, m.id, 1
-                    FROM document_moving_of_goods m RIGHT JOIN document_moving_of_goods_product d ON m.id = d.doc_id
-                    WHERE m.id="|| NEW.id;    
+                IF TG_OP <> \'DELETE\' THEN 
+                    query_string = \'INSERT INTO goods_in_warehouse(period, product_id, warehouse_id, quantity, op, recorder_id, recorder_type) 
+                    SELECT m.date_time, d.product_id, m.warehouse_id, d.quantity, 1, m.id, 1
+                    FROM document_moving_of_goods m RIGHT JOIN document_moving_of_goods_product d ON m.id = d.document_id
+                    WHERE m.id=\'|| NEW.id;    
                 END IF;
-                IF TG_OP = "UPDATE" THEN
+                IF TG_OP = \'UPDATE\' THEN
                     IF OLD.is_posted = true AND NEW.is_posted = true THEN
                         RAISE;
                     ELSIF OLD.is_posted = true AND NEW.is_posted = false THEN
-                        DELETE FROM goods_in_warehouses where recorder_id = NEW.id AND recorder_type = 1;
+                        DELETE FROM goods_in_warehouse where recorder_id = NEW.id AND recorder_type = 1;
                         RETURN NEW;
                     ELSIF OLD.is_posted = false AND NEW.is_posted = true THEN
                         EXECUTE query_string;
@@ -136,13 +136,13 @@ class m190704_000006_create_document_moving_of_goods_tables extends Migration
                     ELSIF OLD.is_posted = false AND NEW.is_posted = false THEN
                         RETURN NEW;
                     END IF;  
-                ELSIF TG_OP = "INSERT" THEN
+                ELSIF TG_OP = \'INSERT\' THEN
                     IF NEW.is_posted = true THEN
                         RAISE;
                     ELSE 
                         RETURN NEW;
                     END IF;  
-                ELSIF TG_OP = "DELETE" THEN
+                ELSIF TG_OP = \'DELETE\' THEN
                     IF OLD.is_posted = true THEN
                         RAISE;
                     ELSE 
@@ -158,7 +158,7 @@ class m190704_000006_create_document_moving_of_goods_tables extends Migration
                 AS $$DECLARE
                 ROW RECORD;
             BEGIN
-                ROW = CASE WHEN TG_OP = "DELETE" THEN OLD ELSE NEW END;
+                ROW = CASE WHEN TG_OP = \'DELETE\' THEN OLD ELSE NEW END;
                 IF (SELECT is_posted FROM document_moving_of_goods WHERE document_moving_of_goods.id = ROW.document_id) = true
                 THEN 
                     RAISE;

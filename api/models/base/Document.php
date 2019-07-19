@@ -24,7 +24,7 @@ use yii\db\Expression;
  * @property Warehouse $warehouse
  * @property DocumentComingOfGoodsProducts[] $documentComingOfGoodsProducts
  */
-class Document extends \yii\db\ActiveRecord
+class Document extends Proto
 {
     /**
      * @inheritdoc
@@ -36,13 +36,7 @@ class Document extends \yii\db\ActiveRecord
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'author_id',
                 'updatedByAttribute' => false,
-            ],
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'version',
-                'updatedAtAttribute' => 'version',
-                'value' => new Expression('NOW()'),
-            ],
+            ]
         ]);
     }
 

@@ -15,6 +15,7 @@ $config = [
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         'allowedIPs' => ['127.0.0.1', '192.168.*'],
+        'historySize' => 200
     ];
  
     $config['bootstrap'][] = 'gii';

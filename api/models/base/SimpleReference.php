@@ -14,11 +14,11 @@ use api\models\User;
  * @property string $description
  *
  */
-class SimpleReference extends \yii\db\ActiveRecord //Proto
+class SimpleReference extends Proto
 {
     
     public function fields()
-    {  // \Yii::info('!!!!!');\Yii::info(parent::fields());
+    {  
         return array_merge(parent::fields(), [
             'id',
             'is_deleted',
@@ -31,7 +31,7 @@ class SimpleReference extends \yii\db\ActiveRecord //Proto
     public function extraFields()
     {
         return array_merge(parent::extraFields(), [
-            'author' 
+            'author',
         ]);
     }
 

@@ -4,12 +4,22 @@ use \api\tests\ApiTester;
 use api\fixtures\ProductFixture;
 use api\fixtures\TokenFixture;
 use api\fixtures\UserFixture;
+use api\fixtures\ObjectPropertyFixture;
+use api\fixtures\PropertyValueFixture;
 
 class ProductCest
 {
     public function _before(ApiTester $I)
     {
         $I->haveFixtures([
+            'object-property' => [
+                'class' => ObjectPropertyFixture::className(),
+                'dataFile' => codecept_data_dir() . 'object-property.php'
+            ],
+            'property-value' => [
+                'class' => PropertyValueFixture::className(),
+                'dataFile' => codecept_data_dir() . 'property-value.php'
+            ],
             'user' => [
                 'class' => UserFixture::className(),
                 'dataFile' => codecept_data_dir() . 'user.php'
@@ -77,6 +87,23 @@ class ProductCest
         ]);
     }
 
+    public function viewWithProperties(ApiTester $I)
+    {   
+        $I->amBearerAuthenticated('token-correct');
+        $I->sendGET('/products/2?expand=properties');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseContainsJson([
+            'description' => 'Ноутбук ASUS VivoBook S15',
+            'properties' => [
+                0 => [
+                    'name' => 'origin-country',
+                    'label' => 'Страна происхождения',
+                    'value' => 'USA',
+                ]    
+            ]    
+        ]);
+    }
+
     public function viewNotFound(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
@@ -100,6 +127,12 @@ class ProductCest
         $I->sendPOST('/products', [
             'code' => '00000004',
             'description' => 'New Product',
+            'properties' => [
+                0 => [
+                    'name' => 'origin-country',
+                    'value' => 'Russia',
+                ]    
+            ]    
         ]);
         $I->seeResponseCodeIs(201);
         $I->seeResponseContainsJson([
@@ -119,12 +152,18 @@ class ProductCest
     public function update(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
-        $I->sendPATCH('/products/1', [
+        $I->sendPATCH('/products/2', [
             'description' => 'New product description',
+            'properties' => [
+                0 => [
+                    'name' => 'origin-country',
+                    'value' => 'Russia',
+                ]    
+            ]    
         ]);
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
-            'id' => 1,
+            'id' => 2,
             'description' => 'New product description',
         ]);
     }
@@ -143,14 +182,14 @@ class ProductCest
         $I->sendDELETE('/products/1');
         $I->seeResponseCodeIs(401);
     }
-
+/*
     public function delete(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
         $I->sendDELETE('/products/1');
         $I->seeResponseCodeIs(204);
     }
-
+*/
     public function deleteForbidden(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-of-user-without-permission');

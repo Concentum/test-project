@@ -18,22 +18,25 @@ class DocumentComingOfGoodsController extends base\DocumentController
 
     public function actions()
     {
-       return array_merge(parent::actions(), [
-           $actions['index'] = [
+        return array_merge(parent::actions(), [
+            'index' => [
                 'class' => 'yii\rest\IndexAction',
                 'modelClass' => $this->modelClass,
                 'dataFilter' => [
                     'class' => \yii\data\ActiveDataFilter::class,
-                    'searchModel' => function () {
-                        return (new \yii\base\DynamicModel([
-                            'counterparty_id' => null,
-                            'warehouse_id' => null,
-                        ]))->addRule('counterparty_id', 'integer')
-                        ->addRule('warehouse_id', 'integer');
-                    }
+                    'searchModel' => $this->searchModel()
                 ]
             ]
        ]);
     }
+
+    public function searchModel()
+    {
+        $sm = parent::searchModel();
+        $sm->addRule(['counterparty_id', 'warehouse_id'], 'integer');
+        $sm->defineAttribute('counterparty_id', $value = null);
+        $sm->defineAttribute('warehouse_id', $value = null);
+        return $sm;
+    }    
 
 }

@@ -17,9 +17,16 @@ return [
         'is_periodic' => false
     ],
     [
-        'object_class' => 'api\models\warehouse',
+        'object_class' => 'api\models\Warehouse',
         'property_name' => 'warehouseman',
         'property_label' => 'Ответственное лицо',
+        'property_rules' => json_encode(''),
+        'is_periodic' => false
+    ],
+    [
+        'object_class' => 'api\models\DocumentComingOfGoods',
+        'property_name' => 'performer',
+        'property_label' => 'Исполнитель',
         'property_rules' => json_encode(''),
         'is_periodic' => false
     ]

@@ -49,8 +49,9 @@ class ObjectPropertyCest
             ['property_label' => 'Страна происхождения'],
             ['property_label' => 'Юридический адрес'],
             ['property_label' => 'Ответственное лицо'],
+            ['property_label' => 'Исполнитель'],
         ]);
-        $I->seeHttpHeader('X-Pagination-Total-Count', 3);
+        $I->seeHttpHeader('X-Pagination-Total-Count', 4);
     }
 
     public function indexWithRules(ApiTester $I)

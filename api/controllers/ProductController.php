@@ -8,7 +8,7 @@ use yii\rest\ActiveController;
  */
 class ProductController extends base\HierarchicalReferenceController
 {
-    public $modelClass = '\api\models\Product';
+    public $modelClass = 'api\models\Product';
 
     public function behaviors()
     {

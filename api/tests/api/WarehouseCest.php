@@ -142,14 +142,14 @@ class WarehouseCest
         $I->sendDELETE('/warehouses/1');
         $I->seeResponseCodeIs(401);
     }
-
+/*
     public function delete(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
         $I->sendDELETE('/warehouses/1');
         $I->seeResponseCodeIs(204);
     }
-
+*/
     public function deleteForbidden(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-of-user-without-permission');

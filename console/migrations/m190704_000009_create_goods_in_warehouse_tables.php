@@ -86,34 +86,39 @@ class m190704_000009_create_goods_in_warehouse_tables extends Migration
         );
            
         $this->execute('
-        CREATE FUNCTION public.goods_in_warehouse_tf() RETURNS trigger
-            LANGUAGE plpgsql
-            AS $$DECLARE
-            _quantity numeric;
-        BEGIN
-          IF (TG_OP = "UPDATE") THEN
-             RAISE;
-          ELSIF (TG_OP = "INSERT") THEN
-             SELECT quantity
-             FROM goods_in_warehouses_total
-             WHERE product_id = NEW.product_id AND warehouse_id = NEW.warehouse_id AND period <= NEW.period
-             ORDER BY period DESC
-             LIMIT 1 INTO _quantity;
-             /* Вставить новый итог */ 
-             INSERT INTO goods_in_warehouse_total(period, product_id, warehouse_id, quantity)
-             VALUES(NEW.period, NEW.product_id, NEW.warehouse_id, COALESCE(_quantity, 0) + NEW.quantity);
-             /* Пересчитать последующие итоги */ 
-             UPDATE goods_in_warehouse_total SET quantity = quantity + NEW.quantity WHERE product_id = NEW.product_id AND warehouse_id = NEW.warehouse_id AND period > NEW.period;
-             RETURN NEW;
-          ELSIF (TG_OP = "DELETE") THEN
-             /* Удалить итог образованный текущим движением */
-             DELETE FROM goods_in_warehouse_total WHERE product_id = OLD.product_id AND warehouse_id = OLD.warehouse_id AND period = OLD.period;
-             /* Пересчитать последующие итоги */ 
-             UPDATE goods_in_warehouse_total SET quantity = quantity - OLD.quantity WHERE product_id = OLD.product_id AND warehouse_id = OLD.warehouse_id AND period >= OLD.period;
-             RETURN OLD;
-          END IF;
-        END;
-        $$;
+            CREATE FUNCTION public.goods_in_warehouse_tf() RETURNS trigger
+              LANGUAGE plpgsql
+              AS $$DECLARE
+              _quantity numeric;
+            BEGIN
+                IF (TG_OP = \'UPDATE\') THEN
+                   RAISE;
+                ELSIF (TG_OP = \'INSERT\') THEN
+                    SELECT quantity
+                    FROM goods_in_warehouse_total
+                    WHERE product_id = NEW.product_id AND warehouse_id = NEW.warehouse_id AND period <= NEW.period
+                    ORDER BY period DESC
+                    LIMIT 1 INTO _quantity;
+                    /* Вставить новый итог */ 
+                    INSERT INTO goods_in_warehouse_total(period, product_id, warehouse_id, quantity)
+                    VALUES(NEW.period, NEW.product_id, NEW.warehouse_id, COALESCE(_quantity, 0) + NEW.quantity);
+                    /* Пересчитать последующие итоги */ 
+                    UPDATE goods_in_warehouse_total SET quantity = quantity + NEW.quantity WHERE product_id = NEW.product_id AND warehouse_id = NEW.warehouse_id AND period > NEW.period;
+                    RETURN NEW;
+                ELSIF (TG_OP = \'DELETE\') THEN
+                    /* Удалить итог образованный текущим движением */
+                    DELETE FROM goods_in_warehouse_total WHERE product_id = OLD.product_id AND warehouse_id = OLD.warehouse_id AND period = OLD.period;
+                    /* Пересчитать последующие итоги */ 
+                    UPDATE goods_in_warehouse_total SET quantity = quantity - OLD.quantity WHERE product_id = OLD.product_id AND warehouse_id = OLD.warehouse_id AND period >= OLD.period;
+                    RETURN OLD;
+                END IF;
+            END;$$;
+        ');
+
+        $this->execute('
+            CREATE TRIGGER goods_in_warehouse_trigger 
+            BEFORE INSERT OR DELETE OR UPDATE ON public.goods_in_warehouse 
+            FOR EACH ROW EXECUTE PROCEDURE public.goods_in_warehouse_tf();
         ');
    
     }

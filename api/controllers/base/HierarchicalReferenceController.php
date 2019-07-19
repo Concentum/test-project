@@ -16,8 +16,7 @@ class HierarchicalReferenceController extends SimpleReferenceController
     
     public function actions()
     {   
-        $actions = parent::actions();
-        $custom_actions = [
+        return array_merge(parent::actions(), [
             'index' => [
                 'class' => 'yii\rest\IndexAction',
                 'modelClass' => $this->modelClass,
@@ -26,11 +25,11 @@ class HierarchicalReferenceController extends SimpleReferenceController
                     'searchModel' => $this->searchModel()
                 ]
             ]
-        ];
-        return array_merge($actions, $custom_actions);
+        ]);
     }
     
-    public function searchModel() {
+    public function searchModel()
+    {
         $sm = parent::searchModel();
         $sm->addRule(['is_folder', 'parent_id'], 'integer');
         $sm->defineAttribute('is_folder', $value = null);
