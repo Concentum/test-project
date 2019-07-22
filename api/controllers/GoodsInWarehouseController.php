@@ -45,7 +45,7 @@ class GoodsInWarehouseController extends ActiveController
                             'SUM(CASE WHEN op = 1 THEN t1.quantity END) AS incoming',
                             'SUM(CASE WHEN op = 2 THEN -t1.quantity END) AS expense'
                             ])->from('goods_in_warehouse t1')
-                            ->rightJoin('goods_in_warehouse_total t2',
+                            ->leftJoin('goods_in_warehouse_total t2',
                                    't1.product_id = t2.product_id AND t1.warehouse_id=t2.warehouse_id')
                         //    ->where()
                             ->groupBy(['t1.product_id', 't1.warehouse_id', 't2.quantity']),

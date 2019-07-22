@@ -120,7 +120,87 @@ class m190704_000009_create_goods_in_warehouse_tables extends Migration
             BEFORE INSERT OR DELETE OR UPDATE ON public.goods_in_warehouse 
             FOR EACH ROW EXECUTE PROCEDURE public.goods_in_warehouse_tf();
         ');
-   
+
+/*            
+select date_trunc('second', t1.period) as period, t1.product_id, t1.warehouse_id, 
+    coalesce(t2.quantity, 0) - sum(case when op = 1 then t1.quantity else 0 end) + sum(case when op = 2 then -t1.quantity else 0 end) begin_quantity,
+    sum(case when op = 1 then t1.quantity else 0 end) as coming_quantity,
+    sum(case when op = 2 then -t1.quantity else 0 end) as expend_quantity,
+    coalesce(t2.quantity, 0) as end_quantity
+from goods_in_warehouse t1 left join (
+    select product_id, warehouse_id, period, quantity
+    from goods_in_warehouse_total t1
+    where period in (
+        select max(period) from goods_in_warehouse_total
+        where goods_in_warehouse_total.warehouse_id = t1.warehouse_id
+            and goods_in_warehouse_total.product_id = t1.product_id
+            and goods_in_warehouse_total.period = t1.period
+    )
+) t2 on t1.product_id = t2.product_id 
+    and t1.warehouse_id = t2.warehouse_id 
+    and date_trunc('second', t1.period) = date_trunc('second', t2.period)
+group by  date_trunc('second', t1.period), t1.product_id, t1.warehouse_id , coalesce(t2.quantity, 0) 
+*/ 
+
+        $this->execute('
+        CREATE OR REPLACE FUNCTION goods_in_warehouse_remains_and_turnover(
+            dateBegin TEXT DEFAULT null, 
+            dateEnd TEXT DEFAULT null,
+            product TEXT DEFAULT null,
+            warehouse TEXT DEFAULT null,
+            detailing TEXT DEFAULT 'millennium'
+        ) RETURNS TABLE (
+            period timestamp, 
+            product_id integer, 
+            warehouse_id integer,
+            begin_quantity numeric,
+            coming_quantity numeric, 
+            expend_quantity numeric,
+            turnover numeric,
+            end_quantity numeric
+        )  
+            LANGUAGE plpgsql
+            AS $$ DECLARE
+            query_string text;
+            product_condition text;
+            warehouse_condition text;
+            period_condition text; 
+        BEGIN
+            period_condition = CASE WHEN dateBegin IS NULL AND dateEnd IS NULL THEN  ''
+                                WHEN dateBegin IS NOT NULL AND dateEnd IS NULL THEN ' and  t1.period >= '|| quote_literal(dateBegin::timestamp)
+                                WHEN dateBegin IS NULL AND dateEnd IS NOT NULL THEN ' and  t1.period <= '|| quote_literal(dateEnd::timestamp)
+                                ELSE  ' and  t1.period between '|| quote_literal(dateBegin::timestamp) ||' and '|| quote_literal(dateEnd::timestamp)
+                             END;
+
+            product_condition = CASE WHEN product IS NULL THEN '' ELSE ' AND t1.'|| product END;
+            warehouse_condition = CASE WHEN warehouse IS NULL THEN '' ELSE ' AND t1.'|| warehouse END;
+
+            detailing = quote_literal(detailing);
+            
+            query_string = 'select date_trunc('||detailing||', t1.period), t1.product_id, t1.warehouse_id, 
+                coalesce(t2.quantity, 0) - sum(case when op = 1 then t1.quantity else 0 end) + sum(case when op = 2 then -t1.quantity else 0 end) begin_quantity,
+                sum(case when op = 1 then t1.quantity else 0 end) as coming_quantity,
+                sum(case when op = 2 then -t1.quantity else 0 end) as expend_quantity,
+                sum(case when op = 1 then t1.quantity else 0 end) - sum(case when op = 2 then -t1.quantity else 0 end) as turnover,
+                coalesce(t2.quantity, 0) as end_quantity
+            from goods_in_warehouse t1
+            left join (
+                select product_id, warehouse_id, period, quantity
+                from goods_in_warehouse_total t1
+                where period in (
+                    select max(period) from goods_in_warehouse_total
+                    where date_trunc('||detailing||', t1.period) = date_trunc('||detailing||', period) '|| period_condition || product_condition || warehouse_condition ||'
+                    group by date_trunc('||detailing||', t1.period), product_id, warehouse_id
+                ) 
+            ) t2 on t1.product_id = t2.product_id and t1.warehouse_id = t2.warehouse_id and date_trunc('||detailing||', t1.period) = date_trunc('||detailing||', t2.period)
+            where 0=0 '|| period_condition || product_condition || warehouse_condition ||'
+            group by  date_trunc('||detailing||', t1.period), t1.product_id, t1.warehouse_id, coalesce(t2.quantity, 0)'; 
+
+            RETURN QUERY EXECUTE query_string;
+        END;$$;
+        ');
+    }
+
     }
 
     /**
@@ -128,6 +208,7 @@ class m190704_000009_create_goods_in_warehouse_tables extends Migration
      */
     public function safeDown()
     {
+        $this->execute('DROP FUNCTION IF EXISTS public.goods_in_warehouse_remains_and_turnover CASCADE;');
         $this->execute('DROP FUNCTION IF EXISTS public.good_in_warehouse_tf CASCADE;');
         $this->dropTable('{{%goods_in_warehouse_total}}');
         $this->dropTable('{{%goods_in_warehouse}}');

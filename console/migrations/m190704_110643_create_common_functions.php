@@ -29,8 +29,9 @@ class m190704_110643_create_functions extends Migration
                 EXECUTE query_string;
             END;$$;
         ');
-    }
 
+
+       
 
     /**
      * {@inheritdoc}
@@ -40,6 +41,7 @@ class m190704_110643_create_functions extends Migration
         echo "m190704_110643_create_functions cannot be reverted.\n";
 
         $this->execute('DROP FUNCTION IF EXISTS public.recalc CASCADE;');
+
       //  return false;
     }
 
