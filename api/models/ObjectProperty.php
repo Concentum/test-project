@@ -43,3 +43,31 @@ class ObjectProperty extends \yii\db\ActiveRecord
         return $this->hasMany(PropertyValue::className(), ['property_id' => 'id']);
     } 
 } 
+
+/* note 
+/* правила небходимо указывать в json
+/* пример:
+
+    [
+        "value",
+        "string",
+        {
+            "min": 5,
+            "max": 10
+        }
+    ]
+
+ещё
+
+    [
+        "value",
+        "exist",
+        {
+            "targetClass": "api\\models\\Counterparty",
+            "targetAttribute": {
+                "value": "id"
+            }
+        }
+    ]
+
+*/

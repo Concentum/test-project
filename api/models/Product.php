@@ -10,7 +10,6 @@ use yii\behaviors\BlameableBehavior;
  */
 class Product extends base\HierarchicalReference
 {
-    
     /**
      * {@inheritdoc}
      */

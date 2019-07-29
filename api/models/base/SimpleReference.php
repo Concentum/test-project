@@ -41,11 +41,11 @@ class SimpleReference extends Proto
     public function rules()
     { 
         return array_merge(parent::rules(), [
+            [['code', 'description'], 'required'],
             [['is_deleted'], 'boolean'],
-            [['version'], 'safe'],
+//            [['version'], 'safe'],
             [['code'], 'string', 'max' => 12],
             [['description'], 'string', 'max' => 64],
-            [['code', 'description'], 'required'],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
         ]);
     }
@@ -56,8 +56,8 @@ class SimpleReference extends Proto
     public function attributeLabels()
     {
         return array_merge([
-            'id' => 'ID',
-            'is_deleted' => 'Is Deleted',
+    //        'id' => 'ID',
+    //        'is_deleted' => 'Is Deleted',
             'code' => 'Code',
             'description' => 'Description',
             'author_id' => 'Author',

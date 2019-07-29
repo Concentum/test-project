@@ -4,15 +4,22 @@ namespace api\models\base;
 use yii;
 use app\models\base\ObjectProperty;
 use app\models\base\PropertyValue;
-use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Inflector;
 
 
 class Proto extends \yii\db\ActiveRecord
 {
+
+    public function title($plural = true)
+    {   
+        return Inflector::camel2words($plural ? Inflector::pluralize(basename(get_class($this))) : basename(get_class($this)));
+    }
+
     private $props = [];
 
     public function behaviors()

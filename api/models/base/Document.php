@@ -46,11 +46,11 @@ class Document extends Proto
     public function rules()
     { 
         return [
-            [['is_deleted', 'is_posted'], 'boolean'],
-            [['version'], 'safe'],
-            [['date_time'], 'safe'],
-            [['number'], 'string', 'max' => 12],
             [['number', 'date_time'], 'required'],
+            [['is_deleted', 'is_posted'], 'boolean'],
+        //    [['version'], 'safe'],
+            [['date_time'], 'datetime'],
+            [['number'], 'string', 'max' => 12],
         ];
     }
 
@@ -60,11 +60,11 @@ class Document extends Proto
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'is_deleted' => 'Is Deleted',
-            'is_posted' => 'Is Posted',
-            'date_time' => 'Date Time',
-            'number' => 'Number',
+    //        'id' => 'ID',
+    //        'is_deleted' => 'Is Deleted',
+    //        'is_posted' => 'Is Posted',
+        'number' => 'Number',
+        'date_time' => 'Date Time',
         ];
     }
     

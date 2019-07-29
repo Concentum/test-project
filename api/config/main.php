@@ -53,7 +53,8 @@ return [
                 'metadata' => 'metadata/index',
                 'auth' => 'auth/auth',
                 'signup' => 'auth/signup',
-                'profile' => 'auth/profile',
+                'profile' => 'auth/profile',     
+
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'counterparty'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'product'],
@@ -63,7 +64,7 @@ return [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'document-moving-of-goods'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'object-property'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'property-value'],
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'goods-in-warehouse'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'goods-in-warehouse'], 
             ],
         ],
         

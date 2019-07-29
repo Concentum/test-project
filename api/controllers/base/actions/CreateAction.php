@@ -75,7 +75,7 @@ class CreateAction extends Action
                 ])) {
                     $dm = new yii\base\DynamicModel(['value' => $property['value']]);
                     if (isset($op->rules) && is_array(json_decode($op->rules))) {
-                        \Yii::info($op->rules);
+//                        \Yii::info($op->rules);
                         foreach(json_decode($op->rules) as $rule) {
                             $dm->addRule($rule);
                         }

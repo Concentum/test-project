@@ -10,7 +10,7 @@ use yii\behaviors\BlameableBehavior;
  */
 class Counterparty extends base\HierarchicalReference
 {
-    
+
     /**
      * {@inheritdoc}
      */
