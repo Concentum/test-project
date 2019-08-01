@@ -5,5 +5,5 @@ use yii\test\ActiveFixture;
 
 class CounterpartyFixture extends ActiveFixture
 {
-    public $modelClass = 'api\models\Counterparty';
+    public $modelClass = 'api\models\references\Counterparty';
 }

@@ -1,14 +1,13 @@
 <?php
-namespace api\models;
+namespace api\models\documents;
 
-use yii\behaviors\TimestampBehavior;
-use yii\behaviors\BlameableBehavior;
+use api\models\references\Warehouse;
 /**
  * This is the model class for table "document_moving_of_goods".
  *
  *
  */
-class DocumentMovingOfGoods extends base\Document
+class MovingOfGoods extends \api\models\base\Document
 {
     
     /**
@@ -49,6 +48,7 @@ class DocumentMovingOfGoods extends base\Document
         return array_merge(parent::attributeLabels(), [
             'source_id' => 'Source',
             'destination_id' => 'Destination',
+            'author_id' => 'Author'
         ]);
     }
 
@@ -65,6 +65,7 @@ class DocumentMovingOfGoods extends base\Document
             'date_time',
             'source',
             'destination',
+            'author'
         ];
     }
 
@@ -75,7 +76,7 @@ class DocumentMovingOfGoods extends base\Document
     {
         return array_merge(parent::fields(), [ 
             'products' => function ($model) {
-                return $model->documentMovingOfGoodsProduct;
+                return $model->movingOfGoodsProduct;
             },
             'author' 
         ]);
@@ -100,15 +101,15 @@ class DocumentMovingOfGoods extends base\Document
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocumentMovingOfGoodsProduct()
+    public function getMovingOfGoodsProduct()
     {
-        return $this->hasMany(DocumentMovingOfGoodsProduct::className(), ['document_id' => 'id']);
+        return $this->hasMany(MovingOfGoodsProduct::className(), ['document_id' => 'id']);
     }
 
     public static function getDetails()
     {
         return [
-            'products' => DocumentMovingOfGoodsProduct::className() 
+            'products' => MovingOfGoodsProduct::className() 
         ];
     }
 }

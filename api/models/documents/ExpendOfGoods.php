@@ -1,12 +1,15 @@
 <?php
-namespace api\models;
+namespace api\models\documents;
+
+use api\models\references\Counterparty;
+use api\models\references\Warehouse;
 
 /**
- * This is the model class for table "document_coming_of_goods".
+ * This is the model class for table "document_expend_of_goods".
  *
  *
  */
-class DocumentComingOfGoods extends base\Document
+class ExpendOfGoods extends \api\models\base\Document
 {
     
     /**
@@ -14,7 +17,7 @@ class DocumentComingOfGoods extends base\Document
      */
     public static function tableName()
     {
-        return 'document_coming_of_goods';
+        return 'document_expend_of_goods';
     }
 
     /**
@@ -47,6 +50,7 @@ class DocumentComingOfGoods extends base\Document
         return array_merge(parent::attributeLabels(), [
             'warehouse_id' => 'Warehouse',
             'counterparty_id' => 'Counterparty',
+            'author_id' => 'Author'
         ]);
     }
 
@@ -54,7 +58,7 @@ class DocumentComingOfGoods extends base\Document
      * @inheritdoc
      */
     public function fields()
-    { 
+    {
         return [
             'id',
             'is_deleted',
@@ -63,6 +67,7 @@ class DocumentComingOfGoods extends base\Document
             'date_time',
             'counterparty',
             'warehouse',
+            'author'
         ];
     }
 
@@ -73,9 +78,9 @@ class DocumentComingOfGoods extends base\Document
     {
         return array_merge(parent::fields(), [ 
             'products' => function ($model) {
-                return $model->documentComingOfGoodsProduct;
+                return $model->expendOfGoodsProduct;
             },
-            'author'
+            'author' 
         ]);
     }
 
@@ -98,15 +103,15 @@ class DocumentComingOfGoods extends base\Document
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocumentComingOfGoodsProduct()
+    public function getExpendOfGoodsProduct()
     {
-        return $this->hasMany(DocumentComingOfGoodsProduct::className(), ['document_id' => 'id']);
+        return $this->hasMany(ExpendOfGoodsProduct::className(), ['document_id' => 'id']);
     }
 
     public static function getDetails()
     {
         return [
-            'products' => DocumentComingOfGoodsProduct::className() 
+            'products' => ExpendOfGoodsProduct::className() 
         ];
     }
 }

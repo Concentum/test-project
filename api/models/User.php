@@ -7,6 +7,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use api\models\auth\Token;
+use yii\helpers\Inflector;
 
 /**
  * User model
@@ -230,5 +231,25 @@ class User extends ActiveRecord implements IdentityInterface
             'id',
             'username'
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'Username',
+        ];
+    }
+
+    public function title($plural = true)
+    {   
+        return Inflector::camel2words($plural ? Inflector::pluralize(basename(get_class($this))) : basename(get_class($this)));
+    }
+
+    public function mainRepresentation()
+    {
+        return ['username'];
     }
 }

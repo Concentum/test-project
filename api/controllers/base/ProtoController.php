@@ -23,7 +23,7 @@ class ProtoController extends ActiveController
             ],
             $behaviors['authenticator'] = [
               'class' => \yii\filters\auth\HttpBearerAuth::className(),
-            ],
+            ], 
         ]);
     }
 

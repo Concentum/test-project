@@ -19,7 +19,7 @@ class m190704_000003_create_counterparty_table extends Migration
             'parent_id' => $this->integer(),
             'version' => $this->timestamp(),
             'code' => $this->string(12)->notNull(),
-            'description' => $this->string(50)->notNull(),
+            'description' => $this->string(64)->notNull(),
             'author_id' => $this->integer()->notNull(),
         ]);
 

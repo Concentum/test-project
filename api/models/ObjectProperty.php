@@ -1,8 +1,9 @@
 <?php
 namespace api\models;
 
+use yii\helpers\Inflector;
 use api\models\PropertyValue;
-      
+
 class ObjectProperty extends \yii\db\ActiveRecord
 {
 
@@ -42,6 +43,28 @@ class ObjectProperty extends \yii\db\ActiveRecord
     {
         return $this->hasMany(PropertyValue::className(), ['property_id' => 'id']);
     } 
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'object_class' => 'Object class',
+            'property_name' => 'Property name',
+            'property_label' => 'Label'
+        ];
+    }
+
+    public function getRepresentation()
+    {
+       return $this->property_name;
+    }
+
+    public function title($plural = true)
+    {   
+        return Inflector::camel2words($plural ? Inflector::pluralize(basename(get_class($this))) : basename(get_class($this)));
+    }
 } 
 
 /* note 

@@ -23,7 +23,7 @@ class UserController extends ActiveController
         $behaviors['corsFilter'] = [
           'class' => \yii\filters\Cors::className(),
         ];
-
+/*
         $behaviors['authenticator'] = [
           'class' => \yii\filters\auth\HttpBearerAuth::className(),
         ];
@@ -36,7 +36,7 @@ class UserController extends ActiveController
                 'roles' => ['@'],
               ],
             ],
-        ]; 
+        ];  */
 	    return $behaviors;
     }
 

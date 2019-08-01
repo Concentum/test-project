@@ -1,14 +1,12 @@
 <?php
-namespace api\controllers;
-
-use api\models\Counterparty;
+namespace api\controllers\references;
 
 /**
  * CounterpartyController implements the CRUD actions for Counterparty model.
  */
-class CounterpartyController extends base\HierarchicalReferenceController
+class CounterpartyController extends \api\controllers\base\HierarchicalReferenceController
 {
-    public $modelClass = 'api\models\Counterparty';
+    public $modelClass = 'api\models\references\Counterparty';
 
     public function behaviors()
     {

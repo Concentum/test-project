@@ -16,7 +16,7 @@ use api\models\User;
  */
 class SimpleReference extends Proto
 {
-    
+
     public function fields()
     {  
         return array_merge(parent::fields(), [
@@ -77,7 +77,7 @@ class SimpleReference extends Proto
      */
     public function getRepresentation()
     {
-       return $this->description;
+       return $this->description.' ('.$this->code.')';
     }
 
     /**

@@ -1,5 +1,5 @@
 <?php
-namespace api\models;
+namespace api\models\references;
 
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
@@ -8,7 +8,7 @@ use yii\behaviors\BlameableBehavior;
  *
  *
  */
-class Product extends base\HierarchicalReference
+class Product extends \api\models\base\HierarchicalReference
 {
     /**
      * {@inheritdoc}
@@ -47,7 +47,13 @@ class Product extends base\HierarchicalReference
     public function fields()
     { 
         return [
-            'id', 'is_deleted', 'is_folder', 'parent_id', 'code', 'description'
+            'id',
+            'is_deleted',
+            'is_folder',
+            'parent',
+            'code',
+            'description',
+            'author'
         ];
     }
 

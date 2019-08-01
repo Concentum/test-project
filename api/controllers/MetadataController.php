@@ -10,26 +10,40 @@ use yii\helpers\Inflector;
  */
 class MetadataController extends Controller
 {
-    private $nspace = 'api\models';
+    private $nspaces = [
+        'references' => 'api\models\references',
+        'documents' => 'api\models\documents',
+        'service' => 'api\models'
+    ];
     private $entitys = [
-        'references' => ['Product', 'Counterparty', 'Warehouse'],
-        'documents' => ['DocumentComingOfGoods', 'DocumentExpendOfGoods', 'DocumentMovingOfGoods'], 
+        'references' => ['Product', 'Counterparty', 'Warehouse', 'Unit', 'Contract'],
+        'documents' => ['ComingOfGoods', 'ExpendOfGoods', 'MovingOfGoods'],
+        'service' => ['User', 'ObjectProperty', 'PropertyValue']
     ];
     private $other = [
         "interfaces" => [
             "main" => [
                 "menu" => [
                     ["label" => "Документы", "items" => [
-                        ["label" => "Приход товара", "endpoint" => "documents.document-coming-of-goods"],
-                        ["label" => "Расход товара", "endpoint" => "documents.document-expend-of-goods"],
-                        ["label" => "Перемещение товара", "endpoint" => "documents.document-moving-of-goods"]
+                        ["label" => "Приход товара", "endpoint" => "documents.coming-of-goods"],
+                        ["label" => "Расход товара", "endpoint" => "documents.expend-of-goods"],
+                        ["label" => "Перемещение товара", "endpoint" => "documents.moving-of-goods"]
                     ]],
                     ["label" => "Справочники", "items" => [
                         ["label" => "Товары", "endpoint" => "references.products"],
                         ["label" => "Склады", "endpoint" => "references.warehouses"],
                         ["label" => "Контрагенты", "endpoint" => "references.counterparties"],
-                        ["label" => "Договоры", "endpoint" => "references.contracts"]
-                    ]] 
+                        ["label" => "Договоры", "endpoint" => "references.contracts"],
+                        ["label" => "Классификаторы", "items" => [
+                            ["label" => "Единицы измерения", "endpoint" => "references.units"],
+                        ]]
+                    ]],
+                    ["label" => "Сервис", "items" => [
+                        ["label" => "Пользователи", "endpoint" => "service.users"],
+                        ["label" => "Роли", "endpoint" => "service.roles"], 
+                        ["label" => "Свойства объектов", "endpoint" => "service.object-properties"],
+                        ["label" => "Значения свойств", "endpoint" => "service.property-values"],
+                    ]]    
                 ]
             ]
         ]	
@@ -59,7 +73,8 @@ class MetadataController extends Controller
         switch (get_class($validator)) {
             case 'yii\validators\ExistValidator':
                 $result['type'] = 'link';
-                $result['target'] = Inflector::camel2id(Inflector::pluralize(basename($validator->targetClass)));
+                $nspace = basename(dirname($validator->targetClass)) === 'models' ? 'service' : basename(dirname($validator->targetClass));
+                $result['target'] = $nspace.'.'.Inflector::camel2id(Inflector::pluralize(basename($validator->targetClass)));
                 if (isset($validator->filter))
                     $result['filter'] = $validator->filter;
                 break;
@@ -100,15 +115,22 @@ class MetadataController extends Controller
 
     public function actionIndex()
     {   
+        Yii::info(\Yii::$app->controllerMap);
         $md2 = [];
         $properties = \api\models\ObjectProperty::find()->asArray()->all();
         $excludeValidators = ['enableClientValidation', 'forceMasterDb', 'targetAttributeJunction'];
         foreach($this->entitys as $key => $items) {
             foreach($items as $entity) {
-                $modelClass = $this->nspace.'\\'.$entity;
+        //        \Yii::info($this->nspaces[$key]);
+                $modelClass = $this->nspaces[$key].'\\'.$entity;
+
                 $model = new $modelClass();
                 $transformEntity = Inflector::camel2id(Inflector::pluralize($entity));
-                $md2[$key][ $transformEntity ]['title'] = $model->title();
+                $md2[$key][$transformEntity]['title'] = $model->title();
+
+                if (method_exists($model, 'mainRepresentation')) {
+                    $md2[$key][$transformEntity]['representation'] = $model->mainRepresentation();
+                }
 
                 $classProperties = array_filter($properties, function($var) use($modelClass) {
                     return $var['object_class'] == $modelClass;
@@ -123,16 +145,16 @@ class MetadataController extends Controller
                     $rules = [];
                     foreach($dm->getValidators() as $validator) {
                         $rules = $this->getValidationRules('value', $validator);
-                        \yii::info($rules);
                     } 
                     $md2[$key][$transformEntity]['properties'][$v['property_name']] = array_merge(['label' => $v['property_label']], $rules);
                 }
             
-
                 $labels = $model->attributeLabels();
+                $md2[$key][$transformEntity]['attributes'] = [];
                 foreach($model->attributes() as $attr) {
-                    if (isset($labels[$attr]))
+                    if (isset($labels[$attr])) {
                         $md2[$key][$transformEntity]['attributes'][$attr]['label'] = $labels[$attr]; 
+                    }
                 } 
                 
                 foreach($model->getValidators() as $validator) {
@@ -143,6 +165,7 @@ class MetadataController extends Controller
                         $md2[$key][$transformEntity]['attributes'][$attribute] = array_merge($md2[$key][$transformEntity]['attributes'][$attribute], $rules);
                     } 
                 }
+
                 foreach($md2[$key][$transformEntity]['attributes'] as $i => $attribute) {
                     if (isset($attribute['type']) && $attribute['type'] === 'link') {
                         $tmp = $md2[$key][$transformEntity]['attributes'][$i]; 

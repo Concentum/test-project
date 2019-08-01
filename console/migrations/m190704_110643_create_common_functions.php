@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m190704_110643_create_functions
+ * Class m190704_110643_create_common_functions
  */
-class m190704_110643_create_functions extends Migration
+class m190704_110643_create_common_functions extends Migration
 {
     /**
      * {@inheritdoc}
@@ -29,7 +29,7 @@ class m190704_110643_create_functions extends Migration
                 EXECUTE query_string;
             END;$$;
         ');
-
+    }    
 
        
 

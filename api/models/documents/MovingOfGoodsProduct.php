@@ -1,12 +1,13 @@
 <?php
-namespace api\models;
+namespace api\models\documents;
 
+use api\models\references\Product;
 /**
  * This is the model class for table "document_moving_of_goods_product".
  *
  *
  */
-class DocumentMovingOfGoodsProduct extends base\DocumentDetail
+class MovingOfGoodsProduct extends \api\models\base\DocumentDetail
 {
     
     /**

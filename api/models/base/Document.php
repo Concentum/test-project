@@ -51,6 +51,7 @@ class Document extends Proto
         //    [['version'], 'safe'],
             [['date_time'], 'datetime'],
             [['number'], 'string', 'max' => 12],
+            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
         ];
     }
 
@@ -65,6 +66,7 @@ class Document extends Proto
     //        'is_posted' => 'Is Posted',
         'number' => 'Number',
         'date_time' => 'Date Time',
+        'author_id' => 'Author'
         ];
     }
     
@@ -80,6 +82,7 @@ class Document extends Proto
             'version',
             'is_deleted',
             'is_posted',
+            'author'
         ];
     } 
 
@@ -89,7 +92,7 @@ class Document extends Proto
     public function extraFields()
     {
         return [
-            'author'
+    //        'author'
         ];
     }
 
@@ -108,7 +111,7 @@ class Document extends Proto
 
     public function getRepresentation()
     {
-       return $this->number.' оf '.$this->date_time;
+       return $this->number.' by '.$this->date_time;
     }
 
     /**

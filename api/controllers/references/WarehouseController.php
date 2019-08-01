@@ -1,14 +1,12 @@
 <?php
-namespace api\controllers;
-
-use api\models\Warehouse;
+namespace api\controllers\references;
 
 /**
  * WarhouseController implements the CRUD actions for Warehouse model.
  */
-class WarehouseController extends base\SimpleReferenceController
+class WarehouseController extends \api\controllers\base\SimpleReferenceController
 {
-    public $modelClass = 'api\models\Warehouse';
+    public $modelClass = 'api\models\references\Warehouse';
     
     public function behaviors()
     {

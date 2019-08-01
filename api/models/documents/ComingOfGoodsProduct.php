@@ -1,12 +1,13 @@
 <?php
-namespace api\models;
+namespace api\models\documents;
 
+use api\models\references\Product;
 /**
- * This is the model class for table "document_expend_of_goods_product".
+ * This is the model class for table "document_coming_of_goods_product".
  *
  *
  */
-class DocumentExpendOfGoodsProduct extends base\DocumentDetail
+class ComingOfGoodsProduct extends \api\models\base\DocumentDetail
 {
     
     /**
@@ -14,7 +15,7 @@ class DocumentExpendOfGoodsProduct extends base\DocumentDetail
      */
     public static function tableName()
     {
-        return 'document_expend_of_goods_product';
+        return 'document_coming_of_goods_product';
     }
 
     /**
@@ -35,7 +36,7 @@ class DocumentExpendOfGoodsProduct extends base\DocumentDetail
 
           [['product_id', 'quantity', 'price'], 'required'],
           [['product_id'], 'integer'],
-          [['quantity', 'price'], 'number'],
+          [['quantity', 'price', 'amount'], 'number'],
           [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
         
         ]);
@@ -75,4 +76,4 @@ class DocumentExpendOfGoodsProduct extends base\DocumentDetail
         return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
 }
-  
+ 

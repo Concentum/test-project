@@ -1,30 +1,20 @@
 <?php
 namespace api\tests\api;
 use \api\tests\ApiTester;
-use api\fixtures\DocumentComingOfGoodsFixture;
-use api\fixtures\DocumentComingOfGoodsProductFixture;
+use api\fixtures\ExpendOfGoodsFixture;
+use api\fixtures\ExpendOfGoodsProductFixture;
 use api\fixtures\ProductFixture;
 use api\fixtures\CounterpartyFixture;
 use api\fixtures\WarehouseFixture;
 use api\fixtures\TokenFixture;
 use api\fixtures\UserFixture;
-use api\fixtures\ObjectPropertyFixture;
-use api\fixtures\PropertyValueFixture;
 use yii\db\Expression;
 
-class DocumentComingOfGoodsCest
+class ExpendOfGoodsCest
 {
     public function _before(ApiTester $I)
     {
         $I->haveFixtures([
-            'object-property' => [
-                'class' => ObjectPropertyFixture::className(),
-                'dataFile' => codecept_data_dir() . 'object-property.php'
-            ],
-            'property-value' => [
-                'class' => PropertyValueFixture::className(),
-                'dataFile' => codecept_data_dir() . 'property-value.php'
-            ],
             'user' => [
                 'class' => UserFixture::className(),
                 'dataFile' => codecept_data_dir() . 'user.php'
@@ -33,13 +23,13 @@ class DocumentComingOfGoodsCest
                 'class' => TokenFixture::className(),
                 'dataFile' => codecept_data_dir() . 'token.php'
             ],
-            'document-coming-of-goods' => [
-                'class' => DocumentComingOfGoodsFixture::className(),
-                'dataFile' => codecept_data_dir() . 'document-coming-of-goods.php'
+            'Expend-of-goods' => [
+                'class' => ExpendOfGoodsFixture::className(),
+                'dataFile' => codecept_data_dir() . 'expend-of-goods.php'
             ], 
-            'document-coming-of-goods-product' => [
-                'class' => DocumentComingOfGoodsProductFixture::className(),
-                'dataFile' => codecept_data_dir() . 'document-coming-of-goods-product.php'
+            'expend-of-goods-product' => [
+                'class' => ExpendOfGoodsProductFixture::className(),
+                'dataFile' => codecept_data_dir() . 'expend-of-goods-product.php'
             ],
             'product' => [
                 'class' => ProductFixture::className(),
@@ -52,14 +42,14 @@ class DocumentComingOfGoodsCest
             'counterparty' => [
                 'class' => CounterpartyFixture::className(),
                 'dataFile' => codecept_data_dir() . 'counterparty.php'
-            ]
+            ],
         ]);
     }
 
     public function index(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-coming-of-goods');
+        $I->sendGET('/expend-of-goods');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             ['number' => '00000001'],
@@ -70,7 +60,7 @@ class DocumentComingOfGoodsCest
     public function indexWithAuthor(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-coming-of-goods?expand=author');
+        $I->sendGET('/expend-of-goods?expand=author');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             [
@@ -85,7 +75,7 @@ class DocumentComingOfGoodsCest
     public function search(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-coming-of-goods?filter[number][like]=00000001');
+        $I->sendGET('/expend-of-goods?filter[number][like]=00000001');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             ['number' => '00000001'],
@@ -99,7 +89,7 @@ class DocumentComingOfGoodsCest
     public function view(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-coming-of-goods/1');
+        $I->sendGET('/expend-of-goods/1');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             'number' => '00000001',
@@ -109,7 +99,7 @@ class DocumentComingOfGoodsCest
     public function viewWithProductsAndAuthor(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-coming-of-goods/1?expand=products,author');
+        $I->sendGET('/expend-of-goods/1?expand=products,author');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             'number' => '00000001',
@@ -130,13 +120,13 @@ class DocumentComingOfGoodsCest
     public function viewNotFound(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-coming-of-goods/15');
+        $I->sendGET('/expend-of-goods/15');
         $I->seeResponseCodeIs(404);
     }
  
     public function createUnauthorized(ApiTester $I)
     {
-        $I->sendPOST('/document-coming-of-goods', [
+        $I->sendPOST('/expend-of-goods', [
             'number' => '00000005',
             'warehouse_id' => '1',
             'counterparty_id' => '2',
@@ -147,7 +137,7 @@ class DocumentComingOfGoodsCest
     public function create(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
-        $I->sendPOST('/document-coming-of-goods', [
+        $I->sendPOST('/expend-of-goods', [
             'number' => '00000005',
             'warehouse_id' => '1',
             'counterparty_id' => '2',
@@ -158,20 +148,8 @@ class DocumentComingOfGoodsCest
                     'product_id' => 2,
                     'quantity' => 1,
                     'price' => 50000
-                ],
-                1 => [
-                    'line_number' => 2,
-                    'product_id' => 3,
-                    'quantity' => 1,
-                    'price' => 45000
                 ]
-            ],
-            'properties' => [
-                0 => [
-                    'name' => 'performer',
-                    'value' => 'Кузин Олег Олегович',
-                ]    
-            ]    
+            ]
         ]);
         $I->seeResponseCodeIs(201);
         $I->seeResponseContainsJson([
@@ -179,41 +157,9 @@ class DocumentComingOfGoodsCest
         ]);
     }
 
-    public function createWithBadDetailData(ApiTester $I)
-    {
-        $I->amBearerAuthenticated('token-correct');
-        $I->sendPOST('/document-coming-of-goods', [
-            'number' => '00000006',
-            'warehouse_id' => '15',
-            'counterparty_id' => '25',
-            'date_time' => '2019-07-12 11:59:48',
-            'products' => [
-                0 => [
-                    'line_number' => 1,
-                    'product_id' => 15,
-                    'quantity' => 1,
-                    'price' => 50000
-                ],
-                1 => [
-                    'line_number' => 1,
-                    'product_id' => 16,
-                    'quantity' => 1,
-                    'price' => 45000
-                ]
-            ],
-            'properties' => [
-                0 => [
-                    'name' => 'perform',
-                    'value' => 'Кузин Олег Олегович',
-                ]
-            ]
-        ]);
-        $I->seeResponseCodeIs(422);
-    }
-
     public function updateUnauthorized(ApiTester $I)
     {
-        $I->sendPATCH('/document-coming-of-goods/1', [
+        $I->sendPATCH('/expend-of-goods/1', [
             'counterparty_id' => 3,
         ]);
         $I->seeResponseCodeIs(401);
@@ -222,7 +168,7 @@ class DocumentComingOfGoodsCest
     public function update(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
-        $I->sendPATCH('/document-coming-of-goods/1', [
+        $I->sendPATCH('/expend-of-goods/1', [
             'counterparty_id' => 3,
             'products' => [
                 0 => [
@@ -245,7 +191,7 @@ class DocumentComingOfGoodsCest
     public function updateForbidden(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-of-user-without-permission');
-        $I->sendPATCH('/document-coming-of-goods/1', [
+        $I->sendPATCH('/expend-of-goods/1', [
             'counterparty_id' => 3
         ]);
         $I->seeResponseCodeIs(403);
@@ -253,21 +199,21 @@ class DocumentComingOfGoodsCest
 
     public function deleteUnauthorized(ApiTester $I)
     {
-        $I->sendDELETE('/document-coming-of-goods/1');
+        $I->sendDELETE('/expend-of-goods/1');
         $I->seeResponseCodeIs(401);
     }
 /*
     public function delete(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
-        $I->sendDELETE('/document-coming-of-goods/1');
+        $I->sendDELETE('/expend-of-goods/1');
         $I->seeResponseCodeIs(204);
     }
 */
     public function deleteForbidden(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-of-user-without-permission');
-        $I->sendDELETE('/document-coming-of-goods/1');
+        $I->sendDELETE('/expend-of-goods/1');
         $I->seeResponseCodeIs(403);
     }
    

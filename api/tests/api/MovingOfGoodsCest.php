@@ -1,15 +1,15 @@
 <?php
 namespace api\tests\api;
 use \api\tests\ApiTester;
-use api\fixtures\DocumentMovingOfGoodsFixture;
-use api\fixtures\DocumentMovingOfGoodsProductFixture;
+use api\fixtures\MovingOfGoodsFixture;
+use api\fixtures\MovingOfGoodsProductFixture;
 use api\fixtures\ProductFixture;
 use api\fixtures\WarehouseFixture;
 use api\fixtures\TokenFixture;
 use api\fixtures\UserFixture;
 use yii\db\Expression;
 
-class DocumentMovingOfGoodsCest
+class MovingOfGoodsCest
 {
     public function _before(ApiTester $I)
     {
@@ -22,13 +22,13 @@ class DocumentMovingOfGoodsCest
                 'class' => TokenFixture::className(),
                 'dataFile' => codecept_data_dir() . 'token.php'
             ],
-            'document-moving-of-goods' => [
-                'class' => DocumentMovingOfGoodsFixture::className(),
-                'dataFile' => codecept_data_dir() . 'document-moving-of-goods.php'
+            'moving-of-goods' => [
+                'class' => MovingOfGoodsFixture::className(),
+                'dataFile' => codecept_data_dir() . 'moving-of-goods.php'
             ], 
-            'document-moving-of-goods-product' => [
-                'class' => DocumentMovingOfGoodsProductFixture::className(),
-                'dataFile' => codecept_data_dir() . 'document-moving-of-goods-product.php'
+            'moving-of-goods-product' => [
+                'class' => MovingOfGoodsProductFixture::className(),
+                'dataFile' => codecept_data_dir() . 'moving-of-goods-product.php'
             ],
             'product' => [
                 'class' => ProductFixture::className(),
@@ -44,7 +44,7 @@ class DocumentMovingOfGoodsCest
     public function index(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-moving-of-goods');
+        $I->sendGET('/moving-of-goods');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             ['number' => '00000001'],
@@ -55,7 +55,7 @@ class DocumentMovingOfGoodsCest
     public function indexWithAuthor(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-moving-of-goods?expand=author');
+        $I->sendGET('/moving-of-goods?expand=author');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             [
@@ -70,7 +70,7 @@ class DocumentMovingOfGoodsCest
     public function search(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-moving-of-goods?filter[number][like]=00000001');
+        $I->sendGET('/moving-of-goods?filter[number][like]=00000001');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             ['number' => '00000001'],
@@ -84,7 +84,7 @@ class DocumentMovingOfGoodsCest
     public function view(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-moving-of-goods/1');
+        $I->sendGET('/moving-of-goods/1');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             'number' => '00000001',
@@ -94,7 +94,7 @@ class DocumentMovingOfGoodsCest
     public function viewWithProductsAndAuthor(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-moving-of-goods/1?expand=products,author');
+        $I->sendGET('/moving-of-goods/1?expand=products,author');
         $I->seeResponseCodeIs(200);
         $I->seeResponseContainsJson([
             'number' => '00000001',
@@ -115,13 +115,13 @@ class DocumentMovingOfGoodsCest
     public function viewNotFound(ApiTester $I)
     {   
         $I->amBearerAuthenticated('token-correct');
-        $I->sendGET('/document-moving-of-goods/15');
+        $I->sendGET('/moving-of-goods/15');
         $I->seeResponseCodeIs(404);
     }
  
     public function createUnauthorized(ApiTester $I)
     {
-        $I->sendPOST('/document-moving-of-goods', [
+        $I->sendPOST('/moving-of-goods', [
             'number' => '00000005',
             'destination_id' => '1',
             'source_id' => '2',
@@ -132,7 +132,7 @@ class DocumentMovingOfGoodsCest
     public function create(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
-        $I->sendPOST('/document-moving-of-goods', [
+        $I->sendPOST('/moving-of-goods', [
             'number' => '00000005',
             'destination_id' => '1',
             'source_id' => '2',
@@ -154,7 +154,7 @@ class DocumentMovingOfGoodsCest
 
     public function updateUnauthorized(ApiTester $I)
     {
-        $I->sendPATCH('/document-moving-of-goods/1', [
+        $I->sendPATCH('/moving-of-goods/1', [
             'source_id' => 3,
         ]);
         $I->seeResponseCodeIs(401);
@@ -163,7 +163,7 @@ class DocumentMovingOfGoodsCest
     public function update(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
-        $I->sendPATCH('/document-moving-of-goods/1', [
+        $I->sendPATCH('/moving-of-goods/1', [
             'source_id' => 3,
             'products' => [
                 0 => [
@@ -186,7 +186,7 @@ class DocumentMovingOfGoodsCest
     public function updateForbidden(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-of-user-without-permission');
-        $I->sendPATCH('/document-moving-of-goods/1', [
+        $I->sendPATCH('/moving-of-goods/1', [
             'source_id' => 3
         ]);
         $I->seeResponseCodeIs(403);
@@ -194,21 +194,21 @@ class DocumentMovingOfGoodsCest
 
     public function deleteUnauthorized(ApiTester $I)
     {
-        $I->sendDELETE('/document-moving-of-goods/1');
+        $I->sendDELETE('/moving-of-goods/1');
         $I->seeResponseCodeIs(401);
     }
 /*
     public function delete(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-correct');
-        $I->sendDELETE('/document-moving-of-goods/1');
+        $I->sendDELETE('/moving-of-goods/1');
         $I->seeResponseCodeIs(204);
     }
 */
     public function deleteForbidden(ApiTester $I)
     {
         $I->amBearerAuthenticated('token-of-user-without-permission');
-        $I->sendDELETE('/document-moving-of-goods/1');
+        $I->sendDELETE('/moving-of-goods/1');
         $I->seeResponseCodeIs(403);
     }
    

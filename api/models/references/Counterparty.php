@@ -1,22 +1,22 @@
 <?php
-namespace api\models;
+namespace api\models\references;
 
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 /**
- * This is the model class for table "warehouse".
+ * This is the model class for table "counterparty".
  *
  *
  */
-class Warehouse extends base\SimpleReference
+class Counterparty extends \api\models\base\HierarchicalReference
 {
-    
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'warehouse';
+        return 'counterparty';
     }
 
     /**
@@ -33,6 +33,7 @@ class Warehouse extends base\SimpleReference
         ]);
     }
     
+
     /**
      * @inheritdoc
      */
@@ -46,9 +47,15 @@ class Warehouse extends base\SimpleReference
      * @inheritdoc
      */
     public function fields()
-    {  
+    {
         return [
-            'id', 'is_deleted', 'code', 'description'
+            'id',
+            'is_deleted',
+            'is_folder',
+            'parent',
+            'code',
+            'description',
+            'author'
         ];
     }
 

@@ -29,9 +29,9 @@ class m190708_165617_insert_rbac_data extends Migration
             'Product',
             'Counterparty',
             'Warehouse',
-            'DocumentComingOfGoods',
-            'DocumentExpendOfGoods',
-            'DocumentMovingOfGoods',
+            'ComingOfGoods',
+            'ExpendOfGoods',
+            'MovingOfGoods',
             'ObjectProperty',
             'PropertyValue'
         ];

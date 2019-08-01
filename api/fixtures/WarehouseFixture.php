@@ -5,5 +5,5 @@ use yii\test\ActiveFixture;
 
 class WarehouseFixture extends ActiveFixture
 {
-    public $modelClass = 'api\models\Warehouse';
+    public $modelClass = 'api\models\references\Warehouse';
 }

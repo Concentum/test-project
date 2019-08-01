@@ -1,11 +1,11 @@
 <?php
-namespace api\controllers;
+namespace api\controllers\registers;
 
 use yii\rest\ActiveController;
 
 class GoodsInWarehouseController extends ActiveController
 {
-    public $modelClass = '\api\models\GoodsInWarehouse';
+    public $modelClass = '\api\models\registers\GoodsInWarehouse';
 
     public $serializer = [
         'class' => 'yii\rest\Serializer',

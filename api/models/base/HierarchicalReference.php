@@ -15,7 +15,7 @@ class HierarchicalReference extends SimpleReference
     { 
         return array_merge(parent::fields(), [
             'is_folder' => 'is_folder',
-            'parent_id' => 'parent_id',
+            'parent' => 'parent',
         ]);
     }
 
@@ -45,12 +45,12 @@ class HierarchicalReference extends SimpleReference
 
     public function getParent()
     {
-        return $this->hasOne($this->class, ['id' => 'parent_id']);
+        return $this->hasOne($this::className(), ['id' => 'parent_id']);
     }
     
     public function getChildren()
     {
-        return $this->hasMany($this->class, ['parent_id' => 'id']);
+        return $this->hasMany($this::className(), ['parent_id' => 'id']);
     }
 
     public function isFolder()

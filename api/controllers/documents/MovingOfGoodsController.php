@@ -1,14 +1,12 @@
 <?php
-namespace api\controllers;
-
-use api\models\DocumentMovingOfGoods;
+namespace api\controllers\documents;
 
 /**
- * DocumentMovingOfGoodsController implements the CRUD actions for DocumentMovingOfGoods model.
+ * MovingOfGoodsController implements the CRUD actions for MovingOfGoods model.
  */
-class DocumentMovingOfGoodsController extends base\DocumentController
+class MovingOfGoodsController extends \api\controllers\base\DocumentController
 {
-    public $modelClass = 'api\models\DocumentMovingOfGoods';
+    public $modelClass = 'api\models\documents\MovingOfGoods';
 
     public function behaviors()
     {

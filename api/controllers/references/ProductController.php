@@ -1,14 +1,12 @@
 <?php
-namespace api\controllers;
-
-use yii\rest\ActiveController;
+namespace api\controllers\references;
 
 /**
  * ProductController implements the CRUD actions for Product model.
  */
-class ProductController extends base\HierarchicalReferenceController
+class ProductController extends \api\controllers\base\HierarchicalReferenceController
 {
-    public $modelClass = 'api\models\Product';
+    public $modelClass = 'api\models\references\Product';
 
     public function behaviors()
     {
