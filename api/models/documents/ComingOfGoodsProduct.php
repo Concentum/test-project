@@ -36,7 +36,8 @@ class ComingOfGoodsProduct extends \api\models\base\DocumentDetail
 
           [['product_id', 'quantity', 'price'], 'required'],
           [['product_id'], 'integer'],
-          [['quantity', 'price', 'amount'], 'number'],
+          [['price', 'amount'], 'number', /*'numberPattern' => '/^(?=.*\d)\d*(?:\.\d{0,2})?$/' */],
+          [['quantity'], 'number', /*'numberPattern' => '/^(?=.*\d)\d*(?:\.\d{0,3})?$/' */],
           [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
         
         ]);
@@ -61,10 +62,12 @@ class ComingOfGoodsProduct extends \api\models\base\DocumentDetail
     public function fields()
     {
         return array_merge(parent::fields(), [
-          'product',
-          'quantity',
-          'price',
-          'amount'
+            'product',
+            'quantity',
+            'price',
+            'amount' => function () {
+                return $this->price * $this->quantity;   
+            }
         ]);
     }
 

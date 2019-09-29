@@ -48,7 +48,11 @@ class Warehouse extends \api\models\base\SimpleReference
     public function fields()
     {  
         return [
-            'id', 'is_deleted', 'code', 'description'
+            'id',
+            'is_deleted',
+            'code',
+            'description',
+            'author'
         ];
     }
 

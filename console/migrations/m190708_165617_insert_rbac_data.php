@@ -26,8 +26,11 @@ class m190708_165617_insert_rbac_data extends Migration
         $auth = Yii::$app->authManager;
 
         $entity = [
+            'User',
             'Product',
+            'Unit',
             'Counterparty',
+            'Contract',
             'Warehouse',
             'ComingOfGoods',
             'ExpendOfGoods',
@@ -36,7 +39,7 @@ class m190708_165617_insert_rbac_data extends Migration
             'PropertyValue'
         ];
 
-        $actions = ['view', 'create', 'update', 'delete'];
+        $actions = ['index', 'view', 'create', 'update', 'delete'];
 
         $admin = $auth->createRole('admin');
         $auth->add($admin);

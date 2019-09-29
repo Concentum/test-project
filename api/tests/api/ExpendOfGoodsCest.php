@@ -23,7 +23,7 @@ class ExpendOfGoodsCest
                 'class' => TokenFixture::className(),
                 'dataFile' => codecept_data_dir() . 'token.php'
             ],
-            'Expend-of-goods' => [
+            'expend-of-goods' => [
                 'class' => ExpendOfGoodsFixture::className(),
                 'dataFile' => codecept_data_dir() . 'expend-of-goods.php'
             ], 

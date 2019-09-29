@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%contract}}`.
  */
-class m190704_000002_create_contract_table extends Migration
+class m190704_000004_create_contract_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -22,6 +22,7 @@ class m190704_000002_create_contract_table extends Migration
             'number' => $this->string(12)->notNull(),
             'expires_at' => $this->timestamp()->notNull(),
             'counterparty_id' => $this->integer()->notNull(),
+            'contract_type' => $this->smallInteger()->notNull(),
             'author_id' => $this->integer()->notNull(),
         ]);
 

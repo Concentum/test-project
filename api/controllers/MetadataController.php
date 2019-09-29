@@ -9,7 +9,10 @@ use yii\helpers\Inflector;
  * Metadata controller
  */
 class MetadataController extends Controller
-{
+{   
+    private $enums = [
+
+    ];
     private $nspaces = [
         'references' => 'api\models\references',
         'documents' => 'api\models\documents',
@@ -65,12 +68,17 @@ class MetadataController extends Controller
     }
     
 
-    function getValidationRules($attribute, $validator) 
+    function getValidationRules($className, $attribute, $validator) 
     {   
         $result = [];
-    //    Yii::info(get_class($validator));
-        
         switch (get_class($validator)) {
+            case 'yii\validators\RangeValidator':
+                $getMethod = 'get'.Inflector::camelize(Inflector::pluralize(Inflector::humanize($attribute)));
+                if (method_exists($className, $getMethod)) {
+                    $result['type'] = 'enum';
+                    $result['items'] = $className::$getMethod();
+                }
+                break;
             case 'yii\validators\ExistValidator':
                 $result['type'] = 'link';
                 $nspace = basename(dirname($validator->targetClass)) === 'models' ? 'service' : basename(dirname($validator->targetClass));
@@ -81,14 +89,16 @@ class MetadataController extends Controller
             case 'yii\validators\BooleanValidator':
                 $result['type'] = 'boolean';
                 break;
+            case 'yii\validators\EmailValidator':
+                $result['type'] = 'string';
+                break;                
             case 'yii\validators\StringValidator':
                 $result['type'] = 'string';
                 break;
-            case 'yii\validators\IntegerValidator':
-                $result['type'] = 'integer';
-                break;
             case 'yii\validators\NumberValidator':
                 $result['type'] = 'number';
+                if (!$validator->integerOnly)
+                    $result['pattern'] = $validator->numberPattern;
                 break;
             case 'yii\validators\DateValidator':
                 $result['type'] = 'date';
@@ -98,7 +108,7 @@ class MetadataController extends Controller
             case 'yii\validators\RequiredValidator':    
                 $result['required'] = true;
                 break;
-            case 'yii\validators\DefaulrValueValidator':    
+            case 'yii\validators\DefaultValueValidator':    
                 $result['default'] = $validator->value;
         }
         if (isset($validator->min))
@@ -115,7 +125,6 @@ class MetadataController extends Controller
 
     public function actionIndex()
     {   
-        Yii::info(\Yii::$app->controllerMap);
         $md2 = [];
         $properties = \api\models\ObjectProperty::find()->asArray()->all();
         $excludeValidators = ['enableClientValidation', 'forceMasterDb', 'targetAttributeJunction'];
@@ -144,8 +153,8 @@ class MetadataController extends Controller
                     }   
                     $rules = [];
                     foreach($dm->getValidators() as $validator) {
-                        $rules = $this->getValidationRules('value', $validator);
-                    } 
+                        $rules = $this->getValidationRules(null, 'value', $validator);
+                    }
                     $md2[$key][$transformEntity]['properties'][$v['property_name']] = array_merge(['label' => $v['property_label']], $rules);
                 }
             
@@ -160,7 +169,7 @@ class MetadataController extends Controller
                 foreach($model->getValidators() as $validator) {
                     $rules = [];
                     foreach($validator->attributes as $attribute) {
-                        $rules = $this->getValidationRules($attribute, $validator);
+                        $rules = $this->getValidationRules($model->className(), $attribute, $validator);
                         if (isset($md2[$key][$transformEntity]['attributes'][$attribute]))
                         $md2[$key][$transformEntity]['attributes'][$attribute] = array_merge($md2[$key][$transformEntity]['attributes'][$attribute], $rules);
                     } 
@@ -186,17 +195,19 @@ class MetadataController extends Controller
                         foreach($model->getValidators() as $validator) {
                             $rules = [];
                             foreach($validator->attributes as $attribute) {
-                                $rules = $this->getValidationRules($attribute, $validator);
+                                $rules = $this->getValidationRules($model->className(), $attribute, $validator);
                                 $rules  =  array_merge($md2[$key][$transformEntity]['details'][$detailKey]['attributes'][$attribute], $rules);
                                 $md2[$key][$transformEntity]['details'][$detailKey]['attributes'][$attribute] = $rules;
                             }
                         }
 
                         foreach($md2[$key][$transformEntity]['details'][$detailKey]['attributes'] as $i => $attribute) {
+                            $tmp = $md2[$key][$transformEntity]['details'][$detailKey]['attributes'][$i]; 
+                            unset($md2[$key][$transformEntity]['details'][$detailKey]['attributes'][$i]);
                             if (isset($attribute['type']) && $attribute['type'] === 'link') {
-                                $tmp = $md2[$key][$transformEntity]['details'][$detailKey]['attributes'][$i]; 
-                                unset($md2[$key][$transformEntity]['details'][$detailKey]['attributes'][$i]);
                                 $md2[$key][$transformEntity]['details'][$detailKey]['attributes'][substr($i, 0, -3)] = $tmp;
+                            } else {
+                                $md2[$key][$transformEntity]['details'][$detailKey]['attributes'][$i] = $tmp;
                             }
                         }
 

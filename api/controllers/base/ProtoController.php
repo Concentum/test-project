@@ -20,16 +20,21 @@ class ProtoController extends ActiveController
         return array_merge(parent::behaviors(), [
             $behaviors['corsFilter'] = [
               'class' => \yii\filters\Cors::className(),
-            ],
+            ], 
             $behaviors['authenticator'] = [
               'class' => \yii\filters\auth\HttpBearerAuth::className(),
-            ], 
+            ],
         ]);
     }
 
     public function actions()
     {
         return array_merge(parent::actions(), [
+            'index' => [
+                'class' => 'api\controllers\base\actions\IndexAction',
+                'modelClass' => $this->modelClass,
+                'checkAccess' => [$this, 'checkAccess'],
+            ],
             'create' => [
                 'class' => 'api\controllers\base\actions\CreateAction',
                 'modelClass' => $this->modelClass,
@@ -46,8 +51,8 @@ class ProtoController extends ActiveController
     }
 
     public function checkAccess($action, $model = null, $params = [])
-    {   
+    {   \Yii::info(\Yii::$app->user->can($action.basename($this->modelClass)));
         if (!\Yii::$app->user->can($action.basename($this->modelClass)))
-        throw new \yii\web\ForbiddenHttpException();
+        throw new \yii\web\ForbiddenHttpException(); 
     }   
 }

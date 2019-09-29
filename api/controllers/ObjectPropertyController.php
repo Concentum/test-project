@@ -52,7 +52,7 @@ class ObjectPropertyController extends ActiveController
     }
 
     public function checkAccess($action, $model = null, $params = [])
-    {   \Yii::info(\Yii::$app->user->can($action.basename($this->modelClass)));
+    {   
         if (!\Yii::$app->user->can($action.basename($this->modelClass)))
         throw new \yii\web\ForbiddenHttpException();
     }

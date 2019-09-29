@@ -207,8 +207,8 @@ class m190704_000008_create_document_expend_of_goods_tables extends Migration
      */
     public function safeDown()
     {   
-        $this->execute('DROP TRIGGER IF EXISTS document_expend_of_goods_product_trigger;');
-        $this->execute('DROP TRIGGER IF EXISTS document_expend_of_goods_trigger;');
+        $this->execute('DROP TRIGGER IF EXISTS document_expend_of_goods_product_trigger ON document_expend_of_goods_product;');
+        $this->execute('DROP TRIGGER IF EXISTS document_expend_of_goods_trigger ON document_expend_of_goods;');
         
         $this->execute('DROP FUNCTION IF EXISTS public.document_expend_of_goods_product_tf CASCADE;');
         $this->execute('DROP FUNCTION IF EXISTS public.document_expend_of_goods_tf CASCADE;');

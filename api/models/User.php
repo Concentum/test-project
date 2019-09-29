@@ -55,6 +55,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
+            ['email', 'email'],
+            ['username', 'string', 'min' => 3, 'max' => 128],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
@@ -229,7 +231,9 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             'id',
-            'username'
+            'username',
+            'email',
+            'status'
         ];
     }
 
@@ -240,6 +244,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             'username' => 'Username',
+            'email' => 'Email',
+            'status' => 'Status',
         ];
     }
 
@@ -251,5 +257,14 @@ class User extends ActiveRecord implements IdentityInterface
     public function mainRepresentation()
     {
         return ['username'];
+    }
+
+    public static function getStatuses()
+    {
+        return [
+            self::STATUS_DELETED => \Yii::t('app', 'Deleted'),
+            self::STATUS_INACTIVE => \Yii::t('app', 'Inactive'), 
+            self::STATUS_ACTIVE => \Yii::t('app', 'Active'),
+        ];
     }
 }

@@ -16,7 +16,8 @@ class SimpleReferenceController extends ProtoController
                 'modelClass' => $this->modelClass,
                 'dataFilter' => [
                     'class' => \yii\data\ActiveDataFilter::class,
-                    'searchModel' => $this->searchModel()
+                    'searchModel' => $this->searchModel(),
+                    'queryOperatorMap' => $this->modelClass::getDB()->driverName === 'pgsql' ? ['LIKE' => 'ILIKE'] : null
                 ]
             ]
         ]);

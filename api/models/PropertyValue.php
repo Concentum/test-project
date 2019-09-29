@@ -30,7 +30,7 @@ class PropertyValue extends \yii\db\ActiveRecord
             [['value'], 'string'],
             [['property_id', 'object_id'], 'integer'],
             [['property_id', 'object_id'], 'required'],
-            [['object_id'], 'exist', 'skipOnError' => true, 'targetClass' => '', 'targetAttribute' => ['object_id' => 'id']],
+            [['object_id'], 'exist', 'skipOnError' => true, /*'targetClass' => '',*/ 'targetAttribute' => ['object_id' => 'id']],
             [['property_id'], 'exist', 'skipOnError' => true, 'targetClass' => ObjectProperty::className(), 'targetAttribute' => ['property_id' => 'id']],
         ];
     }

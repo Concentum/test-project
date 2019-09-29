@@ -10,7 +10,10 @@ use yii\behaviors\BlameableBehavior;
  */
 class Contract extends \api\models\base\SimpleReference
 {
-    
+    const CONTRACT_WITH_SUPPLIER = 1;
+    const CONTRACT_WITH_BUYER = 2;
+    const CONTRACT_OTHER = 3;
+
     /**
      * {@inheritdoc}
      */
@@ -41,9 +44,10 @@ class Contract extends \api\models\base\SimpleReference
         return array_merge(parent::rules(), [
             ['counterparty_id', 'integer'],
             ['counterparty_id', 'required'],
-            [['date', 'expires_at'], 'datetime'],
+            [['date', 'expires_at'], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
             ['number', 'string', 'max' => 12],
             ['counterparty_id', 'exist', 'skipOnError' => true, 'targetClass' => Counterparty::className(), 'targetAttribute' => ['counterparty_id' => 'id']],
+            ['contract_type', 'in', 'range' => [self::CONTRACT_WITH_SUPPLIER, self::CONTRACT_WITH_BUYER, self::CONTRACT_OTHER]],
         ]);
     }
 
@@ -61,6 +65,8 @@ class Contract extends \api\models\base\SimpleReference
             'number',
             'date',
             'expires_at',
+            'contract_type',
+            'author'
         ];
     }
 
@@ -83,6 +89,7 @@ class Contract extends \api\models\base\SimpleReference
             'number' => 'Number',
             'date' => 'Date',
             'expires_at' => 'Expires at',
+            'contract_type' => 'Contract type',
         ]);
     }
 
@@ -92,5 +99,14 @@ class Contract extends \api\models\base\SimpleReference
     public function getCounterparty()
     {
         return $this->hasOne(Counterparty::className(), ['id' => 'counterparty_id']);
+    }
+
+    public static function getContractTypes()
+    {
+        return [
+            self::CONTRACT_WITH_SUPPLIER => \Yii::t('app', 'Contract with supplier'),
+            self::CONTRACT_WITH_BUYER => \Yii::t('app', 'Contract with buyer'), 
+            self::CONTRACT_OTHER => \Yii::t('app', 'Other contract'),
+        ];
     }
 }

@@ -49,7 +49,7 @@ class Document extends Proto
             [['number', 'date_time'], 'required'],
             [['is_deleted', 'is_posted'], 'boolean'],
         //    [['version'], 'safe'],
-            [['date_time'], 'datetime'],
+            [['date_time'], 'datetime', 'format' => 'php:Y-m-d H:i:s'],
             [['number'], 'string', 'max' => 12],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
         ];
@@ -62,8 +62,8 @@ class Document extends Proto
     {
         return [
     //        'id' => 'ID',
-    //        'is_deleted' => 'Is Deleted',
-    //        'is_posted' => 'Is Posted',
+            'is_deleted' => 'Is Deleted',
+            'is_posted' => 'Is Posted',
         'number' => 'Number',
         'date_time' => 'Date Time',
         'author_id' => 'Author'

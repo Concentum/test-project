@@ -16,7 +16,7 @@ class WarehouseController extends \api\controllers\base\SimpleReferenceControlle
     
     public function actions()
     {
-       return array_merge(parent::actions(), [
+        return array_merge(parent::actions(), [
        ]);
     }
 }

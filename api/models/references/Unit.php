@@ -1,6 +1,8 @@
 <?php
 namespace api\models\references;
 
+use yii\behaviors\TimestampBehavior;
+use yii\behaviors\BlameableBehavior;
 /**
  * This is the model class for table "unit".
  *
@@ -17,6 +19,19 @@ class Unit extends \api\models\base\SimpleReference
         return 'unit';
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            [
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'author_id',
+                'updatedByAttribute' => false,
+            ],
+        ]);
+    }
     
     /**
      * @inheritdoc
@@ -34,7 +49,12 @@ class Unit extends \api\models\base\SimpleReference
     public function fields()
     {  
         return [
-            'id', 'is_deleted', 'code', 'description', 'designation'
+            'id',
+            'is_deleted',
+            'code',
+            'description',
+            'designation',
+            'author'
         ];
     }
 
@@ -55,5 +75,10 @@ class Unit extends \api\models\base\SimpleReference
         return array_merge([
             'designation' => 'Designation',
         ], parent::attributeLabels());
+    }
+
+    public function mainRepresentation()
+    {
+        return ['designation'];
     }
 }

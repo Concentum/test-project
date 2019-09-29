@@ -15,8 +15,25 @@ class UnitController extends \api\controllers\base\SimpleReferenceController
     }
     
     public function actions()
+    {   
+        return array_merge(parent::actions(), [
+            'index' => [
+                'class' => 'yii\rest\IndexAction',
+                'modelClass' => $this->modelClass,
+                'dataFilter' => [
+                    'class' => \yii\data\ActiveDataFilter::class,
+                    'searchModel' => $this->searchModel(),
+                    'queryOperatorMap' => $this->modelClass::getDB()->driverName === 'pgsql' ? ['LIKE' => 'ILIKE'] : null
+                ]
+            ]
+        ]);
+    }
+    
+    public function searchModel()
     {
-       return array_merge(parent::actions(), [
-       ]);
+        $sm = parent::searchModel();
+        $sm->addRule(['designation'], 'string');
+        $sm->defineAttribute('designation', $value = null);
+        return $sm;
     }
 }

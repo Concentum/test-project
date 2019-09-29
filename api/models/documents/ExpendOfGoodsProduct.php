@@ -61,10 +61,12 @@ class ExpendOfGoodsProduct extends \api\models\base\DocumentDetail
     public function fields()
     {
         return array_merge(parent::fields(), [
-          'product',
-          'quantity',
-          'price',
-          'amount'
+            'product',
+            'quantity',
+            'price',
+            'amount' => function () {
+                return $this->price * $this->quantity;   
+            }
         ]);
     }
 

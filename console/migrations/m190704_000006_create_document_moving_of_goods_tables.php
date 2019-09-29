@@ -175,8 +175,12 @@ class m190704_000006_create_document_moving_of_goods_tables extends Migration
      */
     public function safeDown()
     {
+        $this->execute('DROP TRIGGER IF EXISTS document_moving_of_goods_product_trigger ON document_moving_of_goods_product;');
+        $this->execute('DROP TRIGGER IF EXISTS document_moving_of_goods_trigger ON document_moving_of_goods;');
+       
         $this->execute('DROP FUNCTION IF EXISTS public.document_moving_of_goods_product_tf CASCADE;');
         $this->execute('DROP FUNCTION IF EXISTS public.document_moving_of_goods_tf CASCADE;');
+        
         $this->dropTable('{{%document_moving_of_goods_product}}');
         $this->dropTable('{{%document_moving_of_goods}}');
     }

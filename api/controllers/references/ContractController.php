@@ -13,7 +13,14 @@ class ContractController extends \api\controllers\base\SimpleReferenceController
         return array_merge(parent::behaviors(), [
         ]);
     }
-    
+
+    public function actions()
+    {
+       return array_merge(parent::actions(), [
+       ]);
+    }
+
+    /*
     public function actions()
     {
         return array_merge(parent::actions(), [
@@ -34,5 +41,5 @@ class ContractController extends \api\controllers\base\SimpleReferenceController
         $sm->addRule(['counterparty_id'], 'integer');
         $sm->defineAttribute('counterparty_id', $value = null);
         return $sm;
-    }    
+    } */   
 }

@@ -6,7 +6,9 @@ $params = array_merge(
     require __DIR__ . '/params-local.php'
 );
 
-function controllerMap() 
+
+/*
+function controllerMap_() 
 {
     return [
         'counterparty' => 'api\controllers\references\CounterpartyController',
@@ -20,6 +22,7 @@ function controllerMap()
         'goods-in-warehouse' => 'api\controllers\registers\GoodsInWarehouseController',
     ];
 }
+*/
 
 return [
     'id' => 'app-api',
@@ -27,7 +30,19 @@ return [
     'controllerNamespace' => 'api\controllers',
     'bootstrap' => ['log'],
     'modules' => [],
-    'controllerMap' => controllerMap(),
+    'controllerMap' => //controllerMap_(),
+        [
+        'counterparty' => 'api\controllers\references\CounterpartyController',
+        'product' => 'api\controllers\references\ProductController',
+        'warehouse' => 'api\controllers\references\WarehouseController',
+        'unit' => 'api\controllers\references\UnitController',
+        'contract' => 'api\controllers\references\ContractController',
+        'coming-of-goods' => 'api\controllers\documents\ComingOfGoodsController',
+        'expend-of-goods' => 'api\controllers\documents\ExpendOfGoodsController',
+        'moving-of-goods' => 'api\controllers\documents\MovingOfGoodsController',
+        'goods-in-warehouse' => 'api\controllers\registers\GoodsInWarehouseController',
+        'goods-in-warehouse-remains-turnover' => 'api\controllers\reports\GoodsInWarehouseRemainsTurnoverController',
+    ],
     'components' => [
         'request' => [
         //    'csrfParam' => '_csrf-api',
@@ -84,6 +99,7 @@ return [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'object-property'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'property-value'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'goods-in-warehouse'], 
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'goods-in-warehouse-remains-turnover'], 
             ],
         ],
         
