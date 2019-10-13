@@ -27,7 +27,9 @@ class m190708_165617_insert_rbac_data extends Migration
 
         $entity = [
             'User',
+            'AuthAssignment',
             'Product',
+            'ProductUnit',
             'Unit',
             'Counterparty',
             'Contract',

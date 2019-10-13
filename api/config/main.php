@@ -34,6 +34,7 @@ return [
         [
         'counterparty' => 'api\controllers\references\CounterpartyController',
         'product' => 'api\controllers\references\ProductController',
+        'product-unit' => 'api\controllers\references\ProductUnitController',
         'warehouse' => 'api\controllers\references\WarehouseController',
         'unit' => 'api\controllers\references\UnitController',
         'contract' => 'api\controllers\references\ContractController',
@@ -88,8 +89,10 @@ return [
                 'profile' => 'auth/profile',     
 
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'user'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'auth-assignment'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'counterparty'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'product'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'product-unit'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'warehouse'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'unit'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'contract'],

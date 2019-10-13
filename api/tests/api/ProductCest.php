@@ -1,7 +1,9 @@
 <?php
 namespace api\tests\api;
 use \api\tests\ApiTester;
+use api\fixtures\UnitFixture;
 use api\fixtures\ProductFixture;
+use api\fixtures\ProductUnitFixture;
 use api\fixtures\TokenFixture;
 use api\fixtures\UserFixture;
 use api\fixtures\ObjectPropertyFixture;
@@ -28,9 +30,17 @@ class ProductCest
                 'class' => TokenFixture::className(),
                 'dataFile' => codecept_data_dir() . 'token.php'
             ],
+            'unit' => [
+                'class' => UnitFixture::className(),
+                'dataFile' => codecept_data_dir() . 'unit.php'
+            ],
             'product' => [
                 'class' => ProductFixture::className(),
                 'dataFile' => codecept_data_dir() . 'product.php'
+            ],
+            'product-unit' => [
+                'class' => ProductUnitFixture::className(),
+                'dataFile' => codecept_data_dir() . 'product-unit.php'
             ],
         ]);
     }

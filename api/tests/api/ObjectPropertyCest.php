@@ -62,7 +62,7 @@ class ObjectPropertyCest
         $I->seeResponseContainsJson([
             [
                 'property_label' => 'Страна происхождения',
-                'rules' => json_encode('')
+                'rules' => ["value", "string", ["max" => 64]]
             ]
         ]);
     }

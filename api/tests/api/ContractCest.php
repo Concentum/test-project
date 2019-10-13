@@ -4,6 +4,7 @@ use \api\tests\ApiTester;
 use api\fixtures\ContractFixture;
 use api\fixtures\TokenFixture;
 use api\fixtures\UserFixture;
+use api\fixtures\CounterpartyFixture;
 
 class ContractCest
 {
@@ -17,6 +18,10 @@ class ContractCest
             'token' => [
                 'class' => TokenFixture::className(),
                 'dataFile' => codecept_data_dir() . 'token.php'
+            ],
+            'counterparty' => [
+                'class' => CounterpartyFixture::className(),
+                'dataFile' => codecept_data_dir() . 'counterparty.php'
             ],
             'contract' => [
                 'class' => ContractFixture::className(),

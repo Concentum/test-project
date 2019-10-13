@@ -52,6 +52,7 @@ class CreateAction extends Action
         if (!$model->validate()) {
             $errors[] = $model->errors;
         }
+        $rows = [];
         
         if (isset($model->details)) {
             foreach($model->details as $key => $detail) {
@@ -104,12 +105,14 @@ class CreateAction extends Action
                     if ($model->insert(false)) {
                         if (isset($model->details)) {
                             foreach($model->details as $key => $detail) {
-                                foreach($rows[$key] as $k => $val) {
-                                    $rows[$key][$k][$detail::$ownerForeignKey] = $model->id;
-                                }
-                        /*        \Yii::info(array_keys($rows[$key][0]));
-                                \Yii::info(array_values($rows[$key])); */
-                                \Yii::$app->db->createCommand()->batchInsert($detail::tableName(), array_keys($rows[$key][0]), array_values($rows[$key]))->execute();
+                                if (isset($rows[$key])) {
+                                    foreach($rows[$key] as $k => $val) {
+                                        $rows[$key][$k][$detail::$ownerForeignKey] = $model->id;
+                                    }
+                            /*        \Yii::info(array_keys($rows[$key][0]));
+                                    \Yii::info(array_values($rows[$key])); */
+                                    \Yii::$app->db->createCommand()->batchInsert($detail::tableName(), array_keys($rows[$key][0]), array_values($rows[$key]))->execute();
+                                }    
                             }
                         }
                         if (isset($props) && is_array($props) && count($props) > 0) {

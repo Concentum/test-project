@@ -205,7 +205,7 @@ group by date_trunc('second', t1.period), t1.product_id, t1.warehouse_id , coale
 
 /*Другой вариант функции, с подготовленным условием для where*/
         $this->execute('
-        CREATE OR REPLACE FUNCTION goods_in_warehouse_remains_and_turnover(
+        CREATE OR REPLACE FUNCTION goods_in_warehouse_remains_and_turnover_v2(
             _condition TEXT DEFAULT null, 
             detailing TEXT DEFAULT \'millennium\'
         ) RETURNS TABLE (
@@ -223,12 +223,8 @@ group by date_trunc('second', t1.period), t1.product_id, t1.warehouse_id , coale
             query_string text;
             where_condition text; 
         BEGIN
-            where_condition =  replace(where_condition, \'product\', \'t1.product\');
-            where_condition =  replace(where_condition, \'warehouse\', \'t1.warehouse\');
-            where_condition =  replace(where_condition, \'period\', \'t1.period\');
-            where_condition =  \' AND \'|| where_condition;
+            where_condition =  \' AND \'|| _condition;
             detailing = quote_literal(detailing);
-            
             query_string = \'select date_trunc(\'||detailing||\', t1.period), t1.product_id, t1.warehouse_id, 
                 coalesce(t2.quantity, 0) - sum(case when op = 1 then t1.quantity else 0 end) + sum(case when op = 2 then -t1.quantity else 0 end) begin_quantity,
                 sum(case when op = 1 then t1.quantity else 0 end) as coming_quantity,
@@ -245,7 +241,6 @@ group by date_trunc('second', t1.period), t1.product_id, t1.warehouse_id , coale
                     group by date_trunc(\'||detailing||\', t1.period), product_id, warehouse_id
                 ) 
             ) t2 on t1.product_id = t2.product_id and t1.warehouse_id = t2.warehouse_id and date_trunc(\'||detailing||\', t1.period) = date_trunc(\'||detailing||\', t2.period)
-            where 0=0 \'|| where_condition ||\'
             group by  date_trunc(\'||detailing||\', t1.period), t1.product_id, t1.warehouse_id, coalesce(t2.quantity, 0)\'; 
 
             RETURN QUERY EXECUTE query_string;
@@ -259,6 +254,7 @@ group by date_trunc('second', t1.period), t1.product_id, t1.warehouse_id , coale
     public function safeDown()
     {
         $this->execute('DROP FUNCTION IF EXISTS public.goods_in_warehouse_remains_and_turnover CASCADE;');
+        $this->execute('DROP FUNCTION IF EXISTS public.goods_in_warehouse_remains_and_turnover_v2 CASCADE;');
         $this->execute('DROP FUNCTION IF EXISTS public.goods_in_warehouse_tf CASCADE;');
         $this->execute('DROP TRIGGER IF EXISTS goods_in_warehouse_trigger ON goods_in_warehouse;');
      

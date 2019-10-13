@@ -38,6 +38,7 @@ class Product extends \api\models\base\HierarchicalReference
     public function rules()
     {
         return array_merge(parent::rules(), [
+            [['unit_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductUnit::className(), 'targetAttribute' => ['unit_id' => 'id']],
         ]);
     }
 
@@ -53,8 +54,19 @@ class Product extends \api\models\base\HierarchicalReference
             'parent',
             'code',
             'description',
+        //    'unit',
             'author'
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return array_merge([
+            'unit_id' => 'Unit',
+        ], parent::attributeLabels());
     }
 
     /**
@@ -63,7 +75,26 @@ class Product extends \api\models\base\HierarchicalReference
     public function extraFields()
     {
         return array_merge(parent::extraFields(), [
+            'units' => function ($model) {
+                return $model->productUnit;
+            },
         ]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUnit()
+    {
+        return $this->hasOne(ProductUnit::className(), ['id' => 'unit_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProductUnit()
+    {
+        return $this->hasMany(ProductUnit::className(), ['product_id' => 'id']);
     }
 
 }

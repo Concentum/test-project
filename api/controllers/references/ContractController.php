@@ -14,13 +14,7 @@ class ContractController extends \api\controllers\base\SimpleReferenceController
         ]);
     }
 
-    public function actions()
-    {
-       return array_merge(parent::actions(), [
-       ]);
-    }
-
-    /*
+        
     public function actions()
     {
         return array_merge(parent::actions(), [
@@ -29,7 +23,8 @@ class ContractController extends \api\controllers\base\SimpleReferenceController
                 'modelClass' => $this->modelClass,
                 'dataFilter' => [
                     'class' => \yii\data\ActiveDataFilter::class,
-                    'searchModel' => $this->searchModel()
+                    'searchModel' => $this->searchModel(),
+                    'queryOperatorMap' => $this->modelClass::getDB()->driverName === 'pgsql' ? ['LIKE' => 'ILIKE'] : null
                 ]
             ]
        ]);
@@ -38,8 +33,14 @@ class ContractController extends \api\controllers\base\SimpleReferenceController
     public function searchModel()
     {
         $sm = parent::searchModel();
-        $sm->addRule(['counterparty_id'], 'integer');
+        $sm->addRule(['counterparty_id', 'contract_type'], 'integer');
+        $sm->addRule(['date', 'expires_at'], 'datetime', ['format' => 'php:Y-m-d H:i:s']);
+        $sm->addRule('number', 'string');
         $sm->defineAttribute('counterparty_id', $value = null);
+        $sm->defineAttribute('contract_type', $value = null);
+        $sm->defineAttribute('number', $value = null);
+        $sm->defineAttribute('date', $value = null);
+        $sm->defineAttribute('expires_at', $value = null);
         return $sm;
-    } */   
+    }    
 }

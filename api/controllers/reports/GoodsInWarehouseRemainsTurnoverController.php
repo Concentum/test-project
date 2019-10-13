@@ -54,7 +54,7 @@ class GoodsInWarehouseRemainsTurnoverController extends ActiveController
                     ]);
                     
 //?filter[product_id][in][]=2&filter[product_id][in][]=3&filter[warehouse_id]=1&filter[period][gte]=2019-01-01%2000:00:00&filter[period][lte]=2019-12-31%2023:59:59&detailing=day
-
+                //    $cond = '';
                     $filterCondition = null;
          \Yii::info(\Yii::$app->request->get());
 
@@ -76,7 +76,7 @@ class GoodsInWarehouseRemainsTurnoverController extends ActiveController
                     }
 
                     $query = $this->modelClass::find()->with(['product', 'warehouse'])
-                    ->select(['*'])->from(['goods_in_warehouse_remains_and_turnover(:_condition, :detailing)'])
+                    ->select(['*'])->from(['goods_in_warehouse_remains_and_turnover_v2(:_condition, :detailing)'])
                     ->addParams([
                         '_condition' => $cond,
                         'detailing' => $detailing

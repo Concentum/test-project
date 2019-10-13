@@ -28,7 +28,7 @@ class HierarchicalReference extends SimpleReference
             [['is_folder'], 'boolean'],
             [['parent_id'], 'default', 'value' => null],
             [['parent_id'], 'integer'],
-            [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => $this::className(), 'targetAttribute' => ['parent_id' => 'id'], 'filter' => ['is_folder' => true]],
+            [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => $this::className(), 'targetAttribute' => ['parent_id' => 'id'], 'filter' => ['is_folder' => 1]],
         ]);
     } 
 

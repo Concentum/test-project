@@ -8,6 +8,7 @@ return [
         'is_deleted' => false,
         'is_folder' => true,
         'parent_id' => null,
+        'unit_id' => 1,
         'version' => new Expression('NOW()'),
         'author_id' => 1
     ],
@@ -18,6 +19,7 @@ return [
         'is_deleted' => false,
         'is_folder' => false,
         'parent_id' => 1,
+        'unit_id' => 1,
         'version' => new Expression('NOW()'),
         'author_id' => 1
     ],
@@ -28,6 +30,7 @@ return [
         'is_deleted' => false,
         'is_folder' => false,
         'parent_id' => 1,
+        'unit_id' => 1,
         'version' => new Expression('NOW()'),
         'author_id' => 1
     ],

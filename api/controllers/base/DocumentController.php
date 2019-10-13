@@ -35,6 +35,6 @@ class DocumentController extends ProtoController
         ->addRule('is_deleted', 'integer')
         ->addRule('is_posted', 'integer')
         ->addRule('number', 'string')
-        ->addRule('date_time', 'string');
+        ->addRule('date_time', 'datetime', ['format' => 'php:Y-m-d H:i:s']);
     }
 }

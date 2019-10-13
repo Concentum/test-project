@@ -5,9 +5,9 @@ use yii\rest\ActiveController;
 use yii\db\Query;
 
 
-class UserController extends ActiveController
+class AuthAssignmentController extends ActiveController
 {
-    public $modelClass = 'api\models\User';
+    public $modelClass = 'api\models\AuthAssignment';
 
    	public $serializer = [
         'class' => 'yii\rest\Serializer',
@@ -59,12 +59,10 @@ class UserController extends ActiveController
 
     public function searchModel() {
         return (new \yii\base\DynamicModel([
-            'username' => null,
-            'email' => null,
-            'status' => null
-        ]))->addRule('username', 'string')
-        ->addRule('email', 'string')
-        ->addRule('status', 'integer');
+            'user_id' => null,
+            'item_name' => null
+        ]))->addRule('user_id', 'integer')
+        ->addRule('item_name', 'string');
     }
 
     public function checkAccess($action, $model = null, $params = [])

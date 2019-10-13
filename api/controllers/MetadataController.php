@@ -19,9 +19,9 @@ class MetadataController extends Controller
         'service' => 'api\models'
     ];
     private $entitys = [
-        'references' => ['Product', 'Counterparty', 'Warehouse', 'Unit', 'Contract'],
+        'references' => ['Product', 'ProductUnit', 'Counterparty', 'Warehouse', 'Unit', 'Contract'],
         'documents' => ['ComingOfGoods', 'ExpendOfGoods', 'MovingOfGoods'],
-        'service' => ['User', 'ObjectProperty', 'PropertyValue']
+        'service' => ['User', 'AuthAssignment', 'ObjectProperty', 'PropertyValue']
     ];
     private $other = [
         "interfaces" => [
@@ -43,7 +43,7 @@ class MetadataController extends Controller
                     ]],
                     ["label" => "Сервис", "items" => [
                         ["label" => "Пользователи", "endpoint" => "service.users"],
-                        ["label" => "Роли", "endpoint" => "service.roles"], 
+                        ["label" => "Роли пользователей", "endpoint" => "service.auth-assignments"], 
                         ["label" => "Свойства объектов", "endpoint" => "service.object-properties"],
                         ["label" => "Значения свойств", "endpoint" => "service.property-values"],
                     ]]    
@@ -135,8 +135,8 @@ class MetadataController extends Controller
 
                 $model = new $modelClass();
                 $transformEntity = Inflector::camel2id(Inflector::pluralize($entity));
-                $md2[$key][$transformEntity]['title'] = $model->title();
-
+                $md2[$key][$transformEntity]['title'] = method_exists($modelClass, "title") ? $model->title() : Inflector::camel2words(basename($modelClass));
+                
                 if (method_exists($model, 'mainRepresentation')) {
                     $md2[$key][$transformEntity]['representation'] = $model->mainRepresentation();
                 }

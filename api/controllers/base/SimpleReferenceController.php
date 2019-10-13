@@ -28,10 +28,12 @@ class SimpleReferenceController extends ProtoController
             'id' => null,
             'code' => null,
             'description' => null,
-            'is_deleted' => null
+            'is_deleted' => null,
+            'author_id' => null
         ]))->addRule('id', 'integer')
         ->addRule('code', 'string')
         ->addRule('description', 'string')
-        ->addRule('is_deleted', 'integer');
+        ->addRule('is_deleted', 'integer')
+        ->addRule('author_id', 'integer');
     }   
 }
